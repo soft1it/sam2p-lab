@@ -2239,9 +2239,4 @@ Rule::Applier::cons_t out_meta_work(GenBuffer::Writable& out, Rule::OutputRule*o
 
 Rule::Applier out_meta_applier = { "Meta", out_meta_check_rule, out_meta_work, 0 };
 
-void out_gif_write(GenBuffer::Writable& out, Image::Indexed* img) {
-    (void)out;
-    (void)img;
-}
-
 /* __END__ */
