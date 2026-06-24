@@ -7,7 +7,7 @@ echo "Cleaning"
 make clean || true
 
 echo "Configure"
-./configure --enable-lzw || true
+./configure --enable-lzw --disable-gif || true
 
 echo "Release build"
 
