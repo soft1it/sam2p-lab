@@ -222,4 +222,6 @@ install: sam2p
 	cp sam2p '$(bindir)'
 	chmod 755 '$(bindir)'/sam2p
 
+ALL = sam2p_main.o appliers.o crc32.o out_gif.o in_ps.o in_tga.o in_pnm.o in_bmp.o in_gif.o in_lbm.o in_xpm.o mapping.o in_pcx.o in_jai.o in_png.o in_jpeg.o in_tiff.o rule.o minips.o encoder.o pts_lzw.o pts_fax.o pts_defl.o error.o image.o gensio.o snprintf.o gensi.o
+
 # __END__ of Makefile
