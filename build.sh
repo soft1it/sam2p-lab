@@ -7,8 +7,7 @@ echo "Cleaning"
 make clean || true
 
 echo "Configure"
-
-./configure || true
+./configure --enable-lzw || true
 
 echo "Release build"
 
