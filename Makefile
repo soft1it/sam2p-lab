@@ -33,7 +33,14 @@ PERL_BADLANG=x
 export PERL_BADLANG
 
 CXXX=$(CXD_assert)
-LDALL=$(LDXX) -s $(LDFLAGS) $(LIBS)
+LDALL=$(LDXX) $(LDFLAGS) $(LIBS)
+
+ifeq ($(USE_ASAN),1)
+    LDALL = $(LDALL_BASE) -fsanitize=address
+else
+    LDALL = $(LDALL_BASE)
+endif
+
 ifeq ($(ENABLE_DEBUG), no)
 CXXX=$(CXD_no)
 endif
@@ -101,11 +108,11 @@ IDE_MODES := release debug
 IDE_TARGETS_debug := $(patsubst %,%.yes, $(TARGETS))
 IDE_TARGETS_release := $(TARGETS)
 
-CXD_assert =$(CXX) -s -O2
-CXD_no     =$(CXX) -s -DNDEBUG -O3
-# CXD_yes    =$(CXX) $(GFLAG) -lefence
-CXD_yes    =$(CXX) $(GFLAG)
-CXD_checker=checkerg++ $(GFLAG)
+CXD_assert =$(CXX) $(MY_CFLAGS)
+CXD_no     =$(CXX) $(MY_CFLAGS)
+# CXD_yes    =$(CXX) $(MY_CFLAGS) -lefence
+CXD_yes    =$(CXX) $(MY_CFLAGS)
+CXD_checker=checkerg++ $(MY_CFLAGS)
 
 # .PHONY: clean dist allclean distclean
 
@@ -223,5 +230,27 @@ install: sam2p
 	chmod 755 '$(bindir)'/sam2p
 
 ALL = sam2p_main.o appliers.o crc32.o out_gif.o in_ps.o in_tga.o in_pnm.o in_bmp.o in_gif.o in_lbm.o in_xpm.o mapping.o in_pcx.o in_jai.o in_png.o in_jpeg.o in_tiff.o rule.o minips.o encoder.o pts_lzw.o pts_fax.o pts_defl.o error.o image.o gensio.o snprintf.o gensi.o
+
+ps_tiny.o: ps_tiny.c
+	$(CXX) $(CXXFLAGS) $(MY_CFLAGS) -DHAVE_CONFIG2_H -fsigned-char -fno-rtti -fno-exceptions -ansi -pedantic -Wall -W -Wextra -c $< -o $@
+
+ps_tiny: ps_tiny.o
+	$(CXX) $< -o $@
+
+#sam2p: $(ALL)
+	#$(CXX) $(ALL) $(LDFLAGS) -o $@
+
+#ifeq ($(USE_ASAN),1)
+    #MY_CFLAGS += -fsanitize=address
+    #LDFLAGS += -fsanitize=address #-lasan
+#endif
+
+ifeq ($(USE_ASAN),1)
+    MY_CFLAGS += -fsanitize=address
+    LDFLAGS += -fsanitize=address
+endif
+
+sam2p: $(ALL)
+	$(CXX) $(ALL) $(LDFLAGS) -o $@
 
 # __END__ of Makefile
