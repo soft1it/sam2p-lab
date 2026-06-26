@@ -15,7 +15,7 @@ echo "test.png -> JPEG"
 ./sam2p-coverage test.jpg TIFF:results/out3.tiff
 echo "test.jpg -> TIFF"
 
-./sam2p-coveragr test.ppm BMP:results/out4.bmp
+./sam2p-coverage test.ppm BMP:results/out4.bmp
 echo "test.pnm -> BMP"
 
 echo ""
