@@ -18,7 +18,6 @@ RUN apt-get update && apt-get install -y \
     lcov \
     gcovr \    
     netpbm \
-    libjapeg-progs \
     imagemagick \
     && rm -rf /var/lib/apt/lists/*
 
