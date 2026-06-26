@@ -1,0 +1,470 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - coverage.info - app/in_jai.cpp</title>
+  <link rel="stylesheet" type="text/css" href="../gcov.css">
+</head>
+
+<body>
+
+          <table width="100%" border=0 cellspacing=0 cellpadding=0>
+            <tr><td class="title">LCOV - code coverage report</td></tr>
+            <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+
+            <tr>
+              <td width="100%">
+                <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="10%" class="headerValue"><a href="../index.html">top level</a> - <a href="index.html">/app</a> - in_jai.cpp<span style="font-size: 80%;"> (source / <a href="in_jai.cpp.func-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="5%"></td>
+            <td width="5%" class="headerCovTableHead">Coverage</td>
+            <td width="5%" class="headerCovTableHead" title="Covered + Uncovered code">Total</td>
+            <td width="5%" class="headerCovTableHead" title="Exercised code only">Hit</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">coverage.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntryLo">71.2&nbsp;%</td>
+            <td class="headerCovTableEntry">146</td>
+            <td class="headerCovTableEntry">104</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test Date:</td>
+            <td class="headerValue">2026-06-26 13:21:55</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntryLo">56.2&nbsp;%</td>
+            <td class="headerCovTableEntry">16</td>
+            <td class="headerCovTableEntry">9</td>
+          </tr>
+                  <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+                </table>
+              </td>
+            </tr>
+
+            <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+          </table>
+
+          <table cellpadding=0 cellspacing=0 border=0>
+            <tr>
+              <td><br></td>
+            </tr>
+            <tr>
+              <td>
+<pre class="sourceHeading">            Line data    Source code</pre>
+<pre class="source">
+<span id="L1"><span class="lineNum">       1</span>              : /*</span>
+<span id="L2"><span class="lineNum">       2</span>              :  * in_jai.cpp -- read a JPEG file as-is</span>
+<span id="L3"><span class="lineNum">       3</span>              :  * by pts@math.bme.hu at Sun Mar 17 20:15:25 CET 2002</span>
+<span id="L4"><span class="lineNum">       4</span>              :  */</span>
+<span id="L5"><span class="lineNum">       5</span>              : /* Imp: test this code with various JPEG files! */</span>
+<span id="L6"><span class="lineNum">       6</span>              : </span>
+<span id="L7"><span class="lineNum">       7</span>              : #ifdef __GNUC__</span>
+<span id="L8"><span class="lineNum">       8</span>              : #ifndef __clang__</span>
+<span id="L9"><span class="lineNum">       9</span>              : #pragma implementation</span>
+<span id="L10"><span class="lineNum">      10</span>              : #endif</span>
+<span id="L11"><span class="lineNum">      11</span>              : #endif</span>
+<span id="L12"><span class="lineNum">      12</span>              : </span>
+<span id="L13"><span class="lineNum">      13</span>              : #include &quot;image.hpp&quot;</span>
+<span id="L14"><span class="lineNum">      14</span>              : #include &quot;error.hpp&quot;</span>
+<span id="L15"><span class="lineNum">      15</span>              : </span>
+<span id="L16"><span class="lineNum">      16</span>              : #if USE_IN_JAI</span>
+<span id="L17"><span class="lineNum">      17</span>              : </span>
+<span id="L18"><span class="lineNum">      18</span>              : #include &quot;in_jai.hpp&quot;</span>
+<span id="L19"><span class="lineNum">      19</span>              : #include &lt;string.h&gt; /* memchr() */</span>
+<span id="L20"><span class="lineNum">      20</span>              : #include &lt;stdio.h&gt;</span>
+<span id="L21"><span class="lineNum">      21</span>              : </span>
+<span id="L22"><span class="lineNum">      22</span>              : /* --- */</span>
+<span id="L23"><span class="lineNum">      23</span>              : </span>
+<span id="L24"><span class="lineNum">      24</span>              : class JAI: public Image::Sampled {</span>
+<span id="L25"><span class="lineNum">      25</span>              :  public:</span>
+<span id="L26"><span class="lineNum">      26</span>              :   /** (Horiz&lt;&lt;4+Vert) sampling factor for the first color component. Usually</span>
+<span id="L27"><span class="lineNum">      27</span>              :    * 0x11, but TIFF defaults to 0x22.</span>
+<span id="L28"><span class="lineNum">      28</span>              :    */</span>
+<span id="L29"><span class="lineNum">      29</span>              :   JAI(dimen_t wd_, dimen_t ht_, unsigned char bpc_, unsigned char cs_, slen_t flen_, slen_t SOF_offs_, unsigned char hvs_);</span>
+<span id="L30"><span class="lineNum">      30</span>              :   virtual void copyRGBRow(char *to, dimen_t whichrow) const;</span>
+<span id="L31"><span class="lineNum">      31</span>              :   virtual void to8();</span>
+<span id="L32"><span class="lineNum">      32</span>              :   virtual Image::Indexed* toIndexed();</span>
+<span id="L33"><span class="lineNum">      33</span>              :   virtual bool canGray() const;</span>
+<span id="L34"><span class="lineNum">      34</span>              :   // virtual void setBpc(unsigned char bpc_);</span>
+<span id="L35"><span class="lineNum">      35</span>              :   virtual Image::RGB    * toRGB(unsigned char bpc_);</span>
+<span id="L36"><span class="lineNum">      36</span>              :   virtual Image::Gray   * toGray(unsigned char bpc_);</span>
+<span id="L37"><span class="lineNum">      37</span>              :   virtual unsigned char minRGBBpc() const;</span>
+<span id="L38"><span class="lineNum">      38</span>              :   virtual Image::Sampled* addAlpha(Image::Gray *al);</span>
+<span id="L39"><span class="lineNum">      39</span>              :   void fixEOI();</span>
+<span id="L40"><span class="lineNum">      40</span>              : };</span>
+<span id="L41"><span class="lineNum">      41</span>              : </span>
+<span id="L42"><span class="lineNum">      42</span> <span class="tlaGNC tlaBgGNC">           4 : JAI::JAI(dimen_t wd_, dimen_t ht_, unsigned char bpc_, unsigned char cs_, slen_t flen_, slen_t SOF_offs_, unsigned char hvs_) {</span></span>
+<span id="L43"><span class="lineNum">      43</span> <span class="tlaGNC">           4 :   param_assert(cs_&lt;=5);</span></span>
+<span id="L44"><span class="lineNum">      44</span>              :   // init(0,0,wd_,ht_,bpc_,TY_BLACKBOX,cs2cpp[cs_]);</span>
+<span id="L45"><span class="lineNum">      45</span> <span class="tlaGNC">           4 :   cs=cs_;</span></span>
+<span id="L46"><span class="lineNum">      46</span> <span class="tlaGNC">           4 :   bpc=8; (void)bpc_; // bpc=bpc_; /* /DCTDecode supports only BitsPerComponent==8 */</span></span>
+<span id="L47"><span class="lineNum">      47</span> <span class="tlaGNC">           4 :   ty=TY_BLACKBOX;</span></span>
+<span id="L48"><span class="lineNum">      48</span> <span class="tlaGNC">           4 :   wd=wd_;</span></span>
+<span id="L49"><span class="lineNum">      49</span> <span class="tlaGNC">           4 :   ht=ht_;</span></span>
+<span id="L50"><span class="lineNum">      50</span> <span class="tlaGNC">           4 :   cpp=cs2cpp[cs_];</span></span>
+<span id="L51"><span class="lineNum">      51</span>              :   // pred=1;</span>
+<span id="L52"><span class="lineNum">      52</span> <span class="tlaGNC">           4 :   transpc=0x1000000UL; /* Dat: this means: no transparent color */</span></span>
+<span id="L53"><span class="lineNum">      53</span> <span class="tlaGNC">           4 :   rlen=0;</span></span>
+<span id="L54"><span class="lineNum">      54</span> <span class="tlaGNC">           4 :   beg=new char[len=0+flen_+0+bpc];</span></span>
+<span id="L55"><span class="lineNum">      55</span> <span class="tlaGNC">           4 :   rowbeg=(headp=const_cast&lt;char*&gt;(beg))+flen_;</span></span>
+<span id="L56"><span class="lineNum">      56</span> <span class="tlaGNC">           4 :   xoffs=SOF_offs_;</span></span>
+<span id="L57"><span class="lineNum">      57</span> <span class="tlaGNC">           4 :   trail=const_cast&lt;char*&gt;(beg)+len-bpc;</span></span>
+<span id="L58"><span class="lineNum">      58</span> <span class="tlaGNC">           4 :   const_cast&lt;char*&gt;(beg)[len-1]=hvs_; /* dirty place */</span></span>
+<span id="L59"><span class="lineNum">      59</span> <span class="tlaGNC">           4 : }</span></span>
+<span id="L60"><span class="lineNum">      60</span>              : </span>
+<span id="L61"><span class="lineNum">      61</span> <span class="tlaUNC tlaBgUNC">           0 : void JAI::fixEOI() {</span></span>
+<span id="L62"><span class="lineNum">      62</span>              :   /* by pts@fazekas.hu at Tue Jun  4 15:36:12 CEST 2002 */</span>
+<span id="L63"><span class="lineNum">      63</span> <span class="tlaUNC">           0 :   if (rowbeg[-2]!='\xFF' || rowbeg[-1]!='\xD9') {</span></span>
+<span id="L64"><span class="lineNum">      64</span> <span class="tlaUNC">           0 :     *rowbeg++='\xFF';</span></span>
+<span id="L65"><span class="lineNum">      65</span> <span class="tlaUNC">           0 :     *rowbeg++='\xD9';</span></span>
+<span id="L66"><span class="lineNum">      66</span>              :   }</span>
+<span id="L67"><span class="lineNum">      67</span> <span class="tlaUNC">           0 : }</span></span>
+<span id="L68"><span class="lineNum">      68</span>              : </span>
+<span id="L69"><span class="lineNum">      69</span> <span class="tlaUNC">           0 : Image::Sampled* JAI::addAlpha(Image::Gray *) {</span></span>
+<span id="L70"><span class="lineNum">      70</span> <span class="tlaUNC">           0 :   Error::sev(Error::WARNING) &lt;&lt; &quot;JAI: alpha channel ignored&quot; &lt;&lt; (Error*)0;</span></span>
+<span id="L71"><span class="lineNum">      71</span> <span class="tlaUNC">           0 :   return this;</span></span>
+<span id="L72"><span class="lineNum">      72</span>              : }</span>
+<span id="L73"><span class="lineNum">      73</span>              : </span>
+<span id="L74"><span class="lineNum">      74</span>              : </span>
+<span id="L75"><span class="lineNum">      75</span> <span class="tlaGNC tlaBgGNC">           4 : unsigned char JAI:: minRGBBpc() const { return bpc; }</span></span>
+<span id="L76"><span class="lineNum">      76</span> <span class="tlaUNC tlaBgUNC">           0 : void JAI::copyRGBRow(char*, dimen_t) const { assert(0); }</span></span>
+<span id="L77"><span class="lineNum">      77</span> <span class="tlaUNC">           0 : void JAI::to8() { assert(0); }</span></span>
+<span id="L78"><span class="lineNum">      78</span> <span class="tlaGNC tlaBgGNC">           4 : Image::Indexed* JAI::toIndexed() { return (Image::Indexed*)NULLP; }</span></span>
+<span id="L79"><span class="lineNum">      79</span> <span class="tlaGNC">           4 : bool JAI::canGray() const { return cs==CS_GRAYSCALE; }</span></span>
+<span id="L80"><span class="lineNum">      80</span> <span class="tlaUNC tlaBgUNC">           0 : Image::RGB    * JAI::toRGB(unsigned char) { assert(0); return 0; }</span></span>
+<span id="L81"><span class="lineNum">      81</span> <span class="tlaUNC">           0 : Image::Gray   * JAI::toGray(unsigned char) { assert(0); return 0; }</span></span>
+<span id="L82"><span class="lineNum">      82</span>              : </span>
+<span id="L83"><span class="lineNum">      83</span>              : /* --- The following code is based on standard/image.c from PHP4 */</span>
+<span id="L84"><span class="lineNum">      84</span>              : </span>
+<span id="L85"><span class="lineNum">      85</span>              : /* some defines for the different JPEG block types */</span>
+<span id="L86"><span class="lineNum">      86</span>              : #define M_SOF0  0xC0                    /* Start Of Frame0: Baseline JPEG */</span>
+<span id="L87"><span class="lineNum">      87</span>              : #define M_SOF1  0xC1                    /* N indicates which compression process */</span>
+<span id="L88"><span class="lineNum">      88</span>              : #define M_SOF2  0xC2                    /* Only SOF0-SOF2 are now in common use */</span>
+<span id="L89"><span class="lineNum">      89</span>              : #define M_SOF3  0xC3</span>
+<span id="L90"><span class="lineNum">      90</span>              : #define M_SOF5  0xC5                    /* NB: codes C4 and CC are NOT SOF markers */</span>
+<span id="L91"><span class="lineNum">      91</span>              : #define M_SOF6  0xC6</span>
+<span id="L92"><span class="lineNum">      92</span>              : #define M_SOF7  0xC7</span>
+<span id="L93"><span class="lineNum">      93</span>              : #define M_SOF9  0xC9</span>
+<span id="L94"><span class="lineNum">      94</span>              : #define M_SOF10 0xCA</span>
+<span id="L95"><span class="lineNum">      95</span>              : #define M_SOF11 0xCB</span>
+<span id="L96"><span class="lineNum">      96</span>              : #define M_SOF13 0xCD</span>
+<span id="L97"><span class="lineNum">      97</span>              : #define M_SOF14 0xCE</span>
+<span id="L98"><span class="lineNum">      98</span>              : #define M_SOF15 0xCF</span>
+<span id="L99"><span class="lineNum">      99</span>              : #define M_SOI   0xD8</span>
+<span id="L100"><span class="lineNum">     100</span>              : #define M_EOI   0xD9                    /* End Of Image (end of datastream) */</span>
+<span id="L101"><span class="lineNum">     101</span>              : #define M_SOS   0xDA                    /* Start Of Scan (begins compressed data) */</span>
+<span id="L102"><span class="lineNum">     102</span>              : #define M_APP0  0xe0</span>
+<span id="L103"><span class="lineNum">     103</span>              : #define M_APP1  0xe1</span>
+<span id="L104"><span class="lineNum">     104</span>              : #define M_APP2  0xe2</span>
+<span id="L105"><span class="lineNum">     105</span>              : #define M_APP3  0xe3</span>
+<span id="L106"><span class="lineNum">     106</span>              : #define M_APP4  0xe4</span>
+<span id="L107"><span class="lineNum">     107</span>              : #define M_APP5  0xe5</span>
+<span id="L108"><span class="lineNum">     108</span>              : #define M_APP6  0xe6</span>
+<span id="L109"><span class="lineNum">     109</span>              : #define M_APP7  0xe7</span>
+<span id="L110"><span class="lineNum">     110</span>              : #define M_APP8  0xe8</span>
+<span id="L111"><span class="lineNum">     111</span>              : #define M_APP9  0xe9</span>
+<span id="L112"><span class="lineNum">     112</span>              : #define M_APP10 0xea</span>
+<span id="L113"><span class="lineNum">     113</span>              : #define M_APP11 0xeb</span>
+<span id="L114"><span class="lineNum">     114</span>              : #define M_APP12 0xec</span>
+<span id="L115"><span class="lineNum">     115</span>              : #define M_APP13 0xed</span>
+<span id="L116"><span class="lineNum">     116</span>              : #define M_APP14 0xee</span>
+<span id="L117"><span class="lineNum">     117</span>              : #define M_APP15 0xef</span>
+<span id="L118"><span class="lineNum">     118</span>              : </span>
+<span id="L119"><span class="lineNum">     119</span>              : </span>
+<span id="L120"><span class="lineNum">     120</span>              : #if 0</span>
+<span id="L121"><span class="lineNum">     121</span>              : static unsigned int jai_next_marker(FILE *fp)</span>
+<span id="L122"><span class="lineNum">     122</span>              :    /* get next marker byte from file */</span>
+<span id="L123"><span class="lineNum">     123</span>              : {</span>
+<span id="L124"><span class="lineNum">     124</span>              :   int c;</span>
+<span id="L125"><span class="lineNum">     125</span>              : </span>
+<span id="L126"><span class="lineNum">     126</span>              : #if 0 /**** pts ****/</span>
+<span id="L127"><span class="lineNum">     127</span>              :   /* skip unimportant stuff */</span>
+<span id="L128"><span class="lineNum">     128</span>              :   c = MACRO_GETC(fp);</span>
+<span id="L129"><span class="lineNum">     129</span>              :   while (c != 0xff) {</span>
+<span id="L130"><span class="lineNum">     130</span>              :     if ((c = MACRO_GETC(fp)) == EOF)</span>
+<span id="L131"><span class="lineNum">     131</span>              :       return M_EOI; /* we hit EOF */</span>
+<span id="L132"><span class="lineNum">     132</span>              :   }</span>
+<span id="L133"><span class="lineNum">     133</span>              : #else</span>
+<span id="L134"><span class="lineNum">     134</span>              :   if (0xff!=(c=MACRO_GETC(fp))) return M_EOI;</span>
+<span id="L135"><span class="lineNum">     135</span>              : #endif</span>
+<span id="L136"><span class="lineNum">     136</span>              : </span>
+<span id="L137"><span class="lineNum">     137</span>              : </span>
+<span id="L138"><span class="lineNum">     138</span>              :   /* get marker byte, swallowing possible padding */</span>
+<span id="L139"><span class="lineNum">     139</span>              :   do {</span>
+<span id="L140"><span class="lineNum">     140</span>              :     if ((c = MACRO_GETC(fp)) == EOF)</span>
+<span id="L141"><span class="lineNum">     141</span>              :       return M_EOI;    /* we hit EOF */</span>
+<span id="L142"><span class="lineNum">     142</span>              :   } while (c == 0xff);</span>
+<span id="L143"><span class="lineNum">     143</span>              : </span>
+<span id="L144"><span class="lineNum">     144</span>              :   return (unsigned int) c;</span>
+<span id="L145"><span class="lineNum">     145</span>              : }</span>
+<span id="L146"><span class="lineNum">     146</span>              : #endif</span>
+<span id="L147"><span class="lineNum">     147</span>              : </span>
+<span id="L148"><span class="lineNum">     148</span>              : #if 0</span>
+<span id="L149"><span class="lineNum">     149</span>              : static inline int getc_(FILE *f) { return MACRO_GETC(f); }</span>
+<span id="L150"><span class="lineNum">     150</span>              : static inline long ftell_(FILE *f) { return ftell(f); }</span>
+<span id="L151"><span class="lineNum">     151</span>              : template &lt;class T&gt;</span>
+<span id="L152"><span class="lineNum">     152</span>              : static unsigned short jai_read2(T *fp);</span>
+<span id="L153"><span class="lineNum">     153</span>              : template &lt;class T&gt;</span>
+<span id="L154"><span class="lineNum">     154</span>              : static void jai_handle_jpeg(struct jai_gfxinfo *result, T *fp) {</span>
+<span id="L155"><span class="lineNum">     155</span>              : #endif</span>
+<span id="L156"><span class="lineNum">     156</span>              : /* Dat: removed templates at Tue Mar 11 19:59:16 CET 2003, because decoding</span>
+<span id="L157"><span class="lineNum">     157</span>              :  * JPEG headers isn't time-critical</span>
+<span id="L158"><span class="lineNum">     158</span>              :  */</span>
+<span id="L159"><span class="lineNum">     159</span>              : </span>
+<span id="L160"><span class="lineNum">     160</span> <span class="tlaGNC tlaBgGNC">         120 : static inline unsigned short jai_read2(GenBuffer::Readable *fp) {</span></span>
+<span id="L161"><span class="lineNum">     161</span>              : #if 0</span>
+<span id="L162"><span class="lineNum">     162</span>              :   unsigned char a[ 2 ];</span>
+<span id="L163"><span class="lineNum">     163</span>              :   /* just return 0 if we hit the end-of-file */</span>
+<span id="L164"><span class="lineNum">     164</span>              :   if (fread(a,sizeof(a),1,fp) != 1) return 0;</span>
+<span id="L165"><span class="lineNum">     165</span>              :   return (((unsigned short) a[ 0 ]) &lt;&lt; 8) + ((unsigned short) a[ 1 ]);</span>
+<span id="L166"><span class="lineNum">     166</span>              : #else</span>
+<span id="L167"><span class="lineNum">     167</span> <span class="tlaGNC">         120 :   int a=fp-&gt;vi_getcc(), b=fp-&gt;vi_getcc();</span></span>
+<span id="L168"><span class="lineNum">     168</span>              :   /* just return 0 if we hit the end-of-file */</span>
+<span id="L169"><span class="lineNum">     169</span> <span class="tlaGNC">         120 :   return a&gt;=0 &amp;&amp; b&gt;=0 ? (a&lt;&lt;8)+b : 0;</span></span>
+<span id="L170"><span class="lineNum">     170</span>              : #endif</span>
+<span id="L171"><span class="lineNum">     171</span>              : }</span>
+<span id="L172"><span class="lineNum">     172</span>              : </span>
+<span id="L173"><span class="lineNum">     173</span>              : /** main loop to parse JPEG structure */</span>
+<span id="L174"><span class="lineNum">     174</span> <span class="tlaGNC">          12 : void jai_parse_jpeg(struct jai_gfxinfo *result, DecoderTeller *fp, bool must_be_baseline) {</span></span>
+<span id="L175"><span class="lineNum">     175</span>              :   int c;</span>
+<span id="L176"><span class="lineNum">     176</span>              :   unsigned int length;</span>
+<span id="L177"><span class="lineNum">     177</span>              :   unsigned char had_adobe;</span>
+<span id="L178"><span class="lineNum">     178</span>              : </span>
+<span id="L179"><span class="lineNum">     179</span> <span class="tlaGNC">          12 :   result-&gt;bad=9; /* signal invalid return value */</span></span>
+<span id="L180"><span class="lineNum">     180</span> <span class="tlaGNC">          12 :   result-&gt;id_rgb=0;</span></span>
+<span id="L181"><span class="lineNum">     181</span> <span class="tlaGNC">          12 :   result-&gt;had_jfif=0;</span></span>
+<span id="L182"><span class="lineNum">     182</span> <span class="tlaGNC">          12 :   result-&gt;colortransform=127; /* no Adobe marker yet */</span></span>
+<span id="L183"><span class="lineNum">     183</span>              :   // fseek(fp, 0L, SEEK_SET);    /* position file pointer on SOF */</span>
+<span id="L184"><span class="lineNum">     184</span>              : </span>
+<span id="L185"><span class="lineNum">     185</span>              :   /* Verify JPEG header */</span>
+<span id="L186"><span class="lineNum">     186</span>              :   /* Dat: maybe 0xFF != '\xFF' */</span>
+<span id="L187"><span class="lineNum">     187</span> <span class="tlaGNC">          12 :   if ((c=fp-&gt;vi_getcc())!=0xFF) return;</span></span>
+<span id="L188"><span class="lineNum">     188</span> <span class="tlaGNC">          12 :   while ((c=fp-&gt;vi_getcc())==0xFF) ;</span></span>
+<span id="L189"><span class="lineNum">     189</span> <span class="tlaGNC">          12 :   if (c!=M_SOI) return;</span></span>
+<span id="L190"><span class="lineNum">     190</span>              : </span>
+<span id="L191"><span class="lineNum">     191</span> <span class="tlaGNC">          12 :   result-&gt;bad=1;</span></span>
+<span id="L192"><span class="lineNum">     192</span>              :   // fprintf(stderr, &quot;welcome ofs=%ld\n&quot;, fp-&gt;vi_tell());</span>
+<span id="L193"><span class="lineNum">     193</span>              :   while (1) {</span>
+<span id="L194"><span class="lineNum">     194</span> <span class="tlaGNC">         108 :    if ((c=fp-&gt;vi_getcc())!=0xFF) { result-&gt;bad=8; return; }</span></span>
+<span id="L195"><span class="lineNum">     195</span> <span class="tlaGNC">         108 :    while ((c=fp-&gt;vi_getcc())==0xFF) ;</span></span>
+<span id="L196"><span class="lineNum">     196</span> <span class="tlaGNC">         108 :    if (c==-1) { result-&gt;bad=2; return; }</span></span>
+<span id="L197"><span class="lineNum">     197</span> <span class="tlaGNC">         108 :    switch (c) {</span></span>
+<span id="L198"><span class="lineNum">     198</span> <span class="tlaGNC">          12 :     case M_SOF0: do_SOF:</span></span>
+<span id="L199"><span class="lineNum">     199</span> <span class="tlaGNC">          12 :       if (result-&gt;bad!=1) { result-&gt;bad=4; return; } /* only one M_SOF allowed */</span></span>
+<span id="L200"><span class="lineNum">     200</span> <span class="tlaGNC">          12 :       result-&gt;SOF_type=c-M_SOF0;</span></span>
+<span id="L201"><span class="lineNum">     201</span> <span class="tlaGNC">          12 :       result-&gt;SOF_offs=fp-&gt;vi_tell();</span></span>
+<span id="L202"><span class="lineNum">     202</span>              :       // fprintf(stderr, &quot;SOF_offs=%d\n&quot;, result-&gt;SOF_offs);</span>
+<span id="L203"><span class="lineNum">     203</span>              :       /* handle SOFn block */</span>
+<span id="L204"><span class="lineNum">     204</span> <span class="tlaGNC">          12 :       length=jai_read2(fp);</span></span>
+<span id="L205"><span class="lineNum">     205</span> <span class="tlaGNC">          12 :       result-&gt;bpc = fp-&gt;vi_getcc();</span></span>
+<span id="L206"><span class="lineNum">     206</span> <span class="tlaGNC">          12 :       result-&gt;height = jai_read2(fp);</span></span>
+<span id="L207"><span class="lineNum">     207</span> <span class="tlaGNC">          12 :       result-&gt;width = jai_read2(fp);</span></span>
+<span id="L208"><span class="lineNum">     208</span> <span class="tlaGNC">          12 :       result-&gt;cpp = fp-&gt;vi_getcc();</span></span>
+<span id="L209"><span class="lineNum">     209</span> <span class="tlaGNC">          12 :       if ((length-=8)!=3U*result-&gt;cpp) return;</span></span>
+<span id="L210"><span class="lineNum">     210</span> <span class="tlaGNC">          12 :       if (result-&gt;bpc!=8) { result-&gt;bad=6; return; }</span></span>
+<span id="L211"><span class="lineNum">     211</span> <span class="tlaGNC">          12 :       if (result-&gt;cpp!=1 &amp;&amp; result-&gt;cpp!=3 &amp;&amp; result-&gt;cpp!=4) { result-&gt;bad=5; return; }</span></span>
+<span id="L212"><span class="lineNum">     212</span> <span class="tlaGNC">          12 :       assert(length&gt;=3);</span></span>
+<span id="L213"><span class="lineNum">     213</span> <span class="tlaGNC">          12 :       if (result-&gt;cpp==3) {</span></span>
+<span id="L214"><span class="lineNum">     214</span> <span class="tlaGNC">          12 :         result-&gt;id_rgb =fp-&gt;vi_getcc()=='R';  result-&gt;hvs=fp-&gt;vi_getcc(); fp-&gt;vi_getcc();</span></span>
+<span id="L215"><span class="lineNum">     215</span> <span class="tlaGNC">          12 :         result-&gt;id_rgb&amp;=fp-&gt;vi_getcc()=='G';  fp-&gt;vi_getcc(); fp-&gt;vi_getcc();</span></span>
+<span id="L216"><span class="lineNum">     216</span> <span class="tlaGNC">          12 :         result-&gt;id_rgb&amp;=fp-&gt;vi_getcc()=='B';  fp-&gt;vi_getcc(); fp-&gt;vi_getcc();</span></span>
+<span id="L217"><span class="lineNum">     217</span> <span class="tlaUNC tlaBgUNC">           0 :       } else { length-=2; fp-&gt;vi_getcc(); result-&gt;hvs=fp-&gt;vi_getcc(); while (length--!=0) fp-&gt;vi_getcc(); }</span></span>
+<span id="L218"><span class="lineNum">     218</span> <span class="tlaGNC tlaBgGNC">          12 :       result-&gt;bad=2;</span></span>
+<span id="L219"><span class="lineNum">     219</span> <span class="tlaGNC">          12 :       break;</span></span>
+<span id="L220"><span class="lineNum">     220</span> <span class="tlaUNC tlaBgUNC">           0 :     case M_SOF1:</span></span>
+<span id="L221"><span class="lineNum">     221</span>              :     case M_SOF2:</span>
+<span id="L222"><span class="lineNum">     222</span>              :     case M_SOF3:</span>
+<span id="L223"><span class="lineNum">     223</span>              :     case M_SOF5:</span>
+<span id="L224"><span class="lineNum">     224</span>              :     case M_SOF6:</span>
+<span id="L225"><span class="lineNum">     225</span>              :     case M_SOF7:</span>
+<span id="L226"><span class="lineNum">     226</span>              :     case M_SOF9:</span>
+<span id="L227"><span class="lineNum">     227</span>              :     case M_SOF10:</span>
+<span id="L228"><span class="lineNum">     228</span>              :     case M_SOF11:</span>
+<span id="L229"><span class="lineNum">     229</span>              :     case M_SOF13:</span>
+<span id="L230"><span class="lineNum">     230</span>              :     case M_SOF14:</span>
+<span id="L231"><span class="lineNum">     231</span>              :     case M_SOF15:</span>
+<span id="L232"><span class="lineNum">     232</span> <span class="tlaUNC">           0 :       if (!must_be_baseline) goto do_SOF;</span></span>
+<span id="L233"><span class="lineNum">     233</span>              :       // fprintf(stderr, &quot;SOF%u\n&quot;, marker-M_SOF0); assert(0);</span>
+<span id="L234"><span class="lineNum">     234</span> <span class="tlaUNC">           0 :       result-&gt;bad=3;</span></span>
+<span id="L235"><span class="lineNum">     235</span> <span class="tlaUNC">           0 :       return;</span></span>
+<span id="L236"><span class="lineNum">     236</span> <span class="tlaGNC tlaBgGNC">          12 :     case M_SOS: /* we are about to hit image data. We're done. Success. */</span></span>
+<span id="L237"><span class="lineNum">     237</span> <span class="tlaGNC">          12 :       if (result-&gt;bad==2 /* &amp;&amp; !feof(fp)*/) { /* Dat: !feof() already guaranteed */</span></span>
+<span id="L238"><span class="lineNum">     238</span> <span class="tlaGNC">          12 :         if (result-&gt;cpp==1) {</span></span>
+<span id="L239"><span class="lineNum">     239</span> <span class="tlaUNC tlaBgUNC">           0 :           result-&gt;colorspace=Image::Sampled::CS_GRAYSCALE;</span></span>
+<span id="L240"><span class="lineNum">     240</span> <span class="tlaGNC tlaBgGNC">          12 :         } else if (result-&gt;cpp==3) {</span></span>
+<span id="L241"><span class="lineNum">     241</span> <span class="tlaGNC">          12 :           result-&gt;colorspace=Image::Sampled::CS_YCbCr;</span></span>
+<span id="L242"><span class="lineNum">     242</span> <span class="tlaGNC">          12 :           if (result-&gt;had_jfif!=0) ;</span></span>
+<span id="L243"><span class="lineNum">     243</span> <span class="tlaUNC tlaBgUNC">           0 :           else if (result-&gt;colortransform==0) result-&gt;colorspace=Image::Sampled::CS_RGB;</span></span>
+<span id="L244"><span class="lineNum">     244</span> <span class="tlaUNC">           0 :           else if (result-&gt;colortransform==1) ;</span></span>
+<span id="L245"><span class="lineNum">     245</span> <span class="tlaUNC">           0 :           else if (result-&gt;colortransform!=127) Error::sev(Error::EERROR) &lt;&lt; &quot;JAI: unknown ColorTransform: &quot; &lt;&lt; (unsigned)result-&gt;colortransform &lt;&lt; (Error*)0;</span></span>
+<span id="L246"><span class="lineNum">     246</span> <span class="tlaUNC">           0 :           else if (result-&gt;id_rgb!=0) result-&gt;colorspace=Image::Sampled::CS_RGB;</span></span>
+<span id="L247"><span class="lineNum">     247</span>              :           /* Imp: check for id_ycbcr */</span>
+<span id="L248"><span class="lineNum">     248</span> <span class="tlaUNC">           0 :           else Error::sev(Error::WARNING) &lt;&lt; &quot;JAI: assuming YCbCr color space&quot; &lt;&lt; (Error*)0;</span></span>
+<span id="L249"><span class="lineNum">     249</span> <span class="tlaUNC">           0 :         } else if (result-&gt;cpp==4) {</span></span>
+<span id="L250"><span class="lineNum">     250</span> <span class="tlaUNC">           0 :           result-&gt;colorspace=Image::Sampled::CS_CMYK;</span></span>
+<span id="L251"><span class="lineNum">     251</span> <span class="tlaUNC">           0 :           if (result-&gt;colortransform==0) ;</span></span>
+<span id="L252"><span class="lineNum">     252</span> <span class="tlaUNC">           0 :           else if (result-&gt;colortransform==2) result-&gt;colorspace=Image::Sampled::CS_YCCK;</span></span>
+<span id="L253"><span class="lineNum">     253</span> <span class="tlaUNC">           0 :           else if (result-&gt;colortransform!=127) Error::sev(Error::EERROR) &lt;&lt; &quot;JAI: unknown ColorTransform: &quot; &lt;&lt; (unsigned)result-&gt;colortransform &lt;&lt; (Error*)0;</span></span>
+<span id="L254"><span class="lineNum">     254</span> <span class="tlaUNC">           0 :         } else assert(0);</span></span>
+<span id="L255"><span class="lineNum">     255</span> <span class="tlaGNC tlaBgGNC">          12 :         result-&gt;bad=0;</span></span>
+<span id="L256"><span class="lineNum">     256</span>              :       }</span>
+<span id="L257"><span class="lineNum">     257</span>              :       /* fall through */</span>
+<span id="L258"><span class="lineNum">     258</span>              :     case M_EOI: /* premature EOF */</span>
+<span id="L259"><span class="lineNum">     259</span> <span class="tlaGNC">          12 :       return;</span></span>
+<span id="L260"><span class="lineNum">     260</span> <span class="tlaGNC">          12 :     case M_APP0: /* JFIF application-specific marker */</span></span>
+<span id="L261"><span class="lineNum">     261</span> <span class="tlaGNC">          12 :       length=jai_read2(fp);</span></span>
+<span id="L262"><span class="lineNum">     262</span> <span class="tlaGNC">          12 :       if (length==2+4+1+2+1+2+2+1+1) {</span></span>
+<span id="L263"><span class="lineNum">     263</span> <span class="tlaGNC">          36 :         result-&gt;had_jfif=fp-&gt;vi_getcc()=='J' &amp;&amp; fp-&gt;vi_getcc()=='F' &amp;&amp; fp-&gt;vi_getcc()=='I' &amp;&amp;</span></span>
+<span id="L264"><span class="lineNum">     264</span> <span class="tlaGNC">          36 :                          fp-&gt;vi_getcc()=='F' &amp;&amp; fp-&gt;vi_getcc()==0;</span></span>
+<span id="L265"><span class="lineNum">     265</span> <span class="tlaGNC">          12 :         length-=7;</span></span>
+<span id="L266"><span class="lineNum">     266</span> <span class="tlaUNC tlaBgUNC">           0 :       } else length-=2;</span></span>
+<span id="L267"><span class="lineNum">     267</span> <span class="tlaGNC tlaBgGNC">         120 :       while (length--!=0) fp-&gt;vi_getcc();</span></span>
+<span id="L268"><span class="lineNum">     268</span> <span class="tlaGNC">          12 :       break;</span></span>
+<span id="L269"><span class="lineNum">     269</span> <span class="tlaUNC tlaBgUNC">           0 :     case M_APP14: /* Adobe application-specific marker */</span></span>
+<span id="L270"><span class="lineNum">     270</span> <span class="tlaUNC">           0 :       length=jai_read2(fp);</span></span>
+<span id="L271"><span class="lineNum">     271</span> <span class="tlaUNC">           0 :       if ((length-=2)==5+2+2+2+1) {</span></span>
+<span id="L272"><span class="lineNum">     272</span> <span class="tlaUNC">           0 :         had_adobe=fp-&gt;vi_getcc()=='A' &amp;&amp; fp-&gt;vi_getcc()=='d' &amp;&amp; fp-&gt;vi_getcc()=='o' &amp;&amp;</span></span>
+<span id="L273"><span class="lineNum">     273</span> <span class="tlaUNC">           0 :                   fp-&gt;vi_getcc()=='b' &amp;&amp; fp-&gt;vi_getcc()=='e' &amp;&amp; ((unsigned char)fp-&gt;vi_getcc())&gt;=1;</span></span>
+<span id="L274"><span class="lineNum">     274</span> <span class="tlaUNC">           0 :         fp-&gt;vi_getcc(); fp-&gt;vi_getcc(); fp-&gt;vi_getcc(); fp-&gt;vi_getcc(); fp-&gt;vi_getcc();</span></span>
+<span id="L275"><span class="lineNum">     275</span> <span class="tlaUNC">           0 :         if (had_adobe) result-&gt;colortransform=fp-&gt;vi_getcc();</span></span>
+<span id="L276"><span class="lineNum">     276</span> <span class="tlaUNC">           0 :                   else fp-&gt;vi_getcc();</span></span>
+<span id="L277"><span class="lineNum">     277</span> <span class="tlaUNC">           0 :       } else while (length--!=0) fp-&gt;vi_getcc();</span></span>
+<span id="L278"><span class="lineNum">     278</span> <span class="tlaUNC">           0 :       break;</span></span>
+<span id="L279"><span class="lineNum">     279</span> <span class="tlaGNC tlaBgGNC">          72 :     case M_APP1:</span></span>
+<span id="L280"><span class="lineNum">     280</span>              :     case M_APP2:</span>
+<span id="L281"><span class="lineNum">     281</span>              :     case M_APP3:</span>
+<span id="L282"><span class="lineNum">     282</span>              :     case M_APP4:</span>
+<span id="L283"><span class="lineNum">     283</span>              :     case M_APP5:</span>
+<span id="L284"><span class="lineNum">     284</span>              :     case M_APP6:</span>
+<span id="L285"><span class="lineNum">     285</span>              :     case M_APP7:</span>
+<span id="L286"><span class="lineNum">     286</span>              :     case M_APP8:</span>
+<span id="L287"><span class="lineNum">     287</span>              :     case M_APP9:</span>
+<span id="L288"><span class="lineNum">     288</span>              :     case M_APP10:</span>
+<span id="L289"><span class="lineNum">     289</span>              :     case M_APP11:</span>
+<span id="L290"><span class="lineNum">     290</span>              :     case M_APP12:</span>
+<span id="L291"><span class="lineNum">     291</span>              :     case M_APP13:</span>
+<span id="L292"><span class="lineNum">     292</span>              :     case M_APP15:</span>
+<span id="L293"><span class="lineNum">     293</span>              :       /* fall through */</span>
+<span id="L294"><span class="lineNum">     294</span>              :     default: { /* anything else isn't interesting */</span>
+<span id="L295"><span class="lineNum">     295</span>              :       /* skip over a variable-length block; assumes proper length marker */</span>
+<span id="L296"><span class="lineNum">     296</span>              :       unsigned short length;</span>
+<span id="L297"><span class="lineNum">     297</span> <span class="tlaGNC">          72 :       length = jai_read2(fp);</span></span>
+<span id="L298"><span class="lineNum">     298</span> <span class="tlaGNC">          72 :       length -= 2;        /* length includes itself */</span></span>
+<span id="L299"><span class="lineNum">     299</span>              :       #if 0 /**** pts: fseek would disturb later ftell()s and feof()s */</span>
+<span id="L300"><span class="lineNum">     300</span>              :         fseek(fp, (long) length, SEEK_CUR);  /* skip the header */</span>
+<span id="L301"><span class="lineNum">     301</span>              :       #else</span>
+<span id="L302"><span class="lineNum">     302</span> <span class="tlaGNC">        2532 :         while (length--!=0) fp-&gt;vi_getcc(); /* make feof(fp) correct */</span></span>
+<span id="L303"><span class="lineNum">     303</span>              :       #endif</span>
+<span id="L304"><span class="lineNum">     304</span>              :     }</span>
+<span id="L305"><span class="lineNum">     305</span>              :    }</span>
+<span id="L306"><span class="lineNum">     306</span> <span class="tlaGNC">          96 :   }</span></span>
+<span id="L307"><span class="lineNum">     307</span>              : }</span>
+<span id="L308"><span class="lineNum">     308</span>              : </span>
+<span id="L309"><span class="lineNum">     309</span>              : char const*jai_errors[]={</span>
+<span id="L310"><span class="lineNum">     310</span>              :   (char const*)NULLP,</span>
+<span id="L311"><span class="lineNum">     311</span>              :   /*1*/ &quot;missing SOF0 marker&quot;,</span>
+<span id="L312"><span class="lineNum">     312</span>              :   /*2*/ &quot;premature EOF&quot;,</span>
+<span id="L313"><span class="lineNum">     313</span>              :   /*3*/ &quot;not a Baseline JPEG (SOF must be SOF0)&quot;,</span>
+<span id="L314"><span class="lineNum">     314</span>              :   /*4*/ &quot;more SOF0 markers&quot;,</span>
+<span id="L315"><span class="lineNum">     315</span>              :   /*5*/ &quot;bad # components&quot;,</span>
+<span id="L316"><span class="lineNum">     316</span>              :   /*6*/ &quot;bad bpc&quot;,</span>
+<span id="L317"><span class="lineNum">     317</span>              :   /*7*/ &quot;?&quot;,</span>
+<span id="L318"><span class="lineNum">     318</span>              :   /*8*/ &quot;0xFF expected&quot;,</span>
+<span id="L319"><span class="lineNum">     319</span>              :   /*9*/ &quot;invalid JPEG header&quot;,</span>
+<span id="L320"><span class="lineNum">     320</span>              :   // /*10*/ &quot;not ending with EOI&quot;, /* not output by jai_handle_jpeg! */</span>
+<span id="L321"><span class="lineNum">     321</span>              : };</span>
+<span id="L322"><span class="lineNum">     322</span>              : </span>
+<span id="L323"><span class="lineNum">     323</span> <span class="tlaGNC">           4 : static Image::Sampled *in_jai_reader(Image::Loader::UFD* ufd, SimBuffer::Flat const&amp;) {</span></span>
+<span id="L324"><span class="lineNum">     324</span>              :   // assert(0);</span>
+<span id="L325"><span class="lineNum">     325</span>              :   struct jai_gfxinfo gi;</span>
+<span id="L326"><span class="lineNum">     326</span> <span class="tlaGNC">           4 :   Filter::UngetFILED* ufdd=(Filter::UngetFILED*)ufd;</span></span>
+<span id="L327"><span class="lineNum">     327</span> <span class="tlaGNC">           4 :   FILE *file_=ufdd-&gt;getFILE(/*seekable:*/true);</span></span>
+<span id="L328"><span class="lineNum">     328</span> <span class="tlaGNC">           4 :   jai_parse_jpeg(&amp;gi, ufdd);</span></span>
+<span id="L329"><span class="lineNum">     329</span>              :   // jai_parse_jpeg(&amp;gi, (FILE*)file_);</span>
+<span id="L330"><span class="lineNum">     330</span>              :   // long ftel=ftell((FILE*)file_);</span>
+<span id="L331"><span class="lineNum">     331</span> <span class="tlaGNC">           4 :   if (gi.bad!=0) Error::sev(Error::EERROR) &lt;&lt; &quot;JAI: &quot; &lt;&lt; jai_errors[gi.bad] &lt;&lt; (Error*)0;</span></span>
+<span id="L332"><span class="lineNum">     332</span>              :   // printf(&quot;ftell=%lu\n&quot;, ftell((FILE*)file_));</span>
+<span id="L333"><span class="lineNum">     333</span> <span class="tlaGNC">           4 :   fseek((FILE*)file_, 0L, 2); /* EOF */</span></span>
+<span id="L334"><span class="lineNum">     334</span> <span class="tlaGNC">           4 :   long flen=ftell((FILE*)file_); /* skip extra bytes after EOI. Imp: no need to do this */</span></span>
+<span id="L335"><span class="lineNum">     335</span>              :   // fprintf(stderr, &quot;flen=%lu\n&quot;, flen);</span>
+<span id="L336"><span class="lineNum">     336</span> <span class="tlaGNC">           4 :   assert(flen&gt;2);</span></span>
+<span id="L337"><span class="lineNum">     337</span> <span class="tlaGNC">           4 :   rewind((FILE*)file_);</span></span>
+<span id="L338"><span class="lineNum">     338</span> <span class="tlaGNC">           4 :   JAI *ret=new JAI(gi.width,gi.height,gi.bpc,gi.colorspace,flen,gi.SOF_offs,gi.hvs);</span></span>
+<span id="L339"><span class="lineNum">     339</span> <span class="tlaGNC">           4 :   if (fread(ret-&gt;getHeadp(), flen, 1, (FILE*)file_)!=1 || ferror((FILE*)file_)) {</span></span>
+<span id="L340"><span class="lineNum">     340</span> <span class="tlaUNC tlaBgUNC">           0 :     ret-&gt;fixEOI();</span></span>
+<span id="L341"><span class="lineNum">     341</span>              :     /* fclose((FILE*)file_); */</span>
+<span id="L342"><span class="lineNum">     342</span> <span class="tlaUNC">           0 :     Error::sev(Error::EERROR) &lt;&lt; &quot;JAI: IO error&quot; &lt;&lt; (Error*)0;</span></span>
+<span id="L343"><span class="lineNum">     343</span>              :   }</span>
+<span id="L344"><span class="lineNum">     344</span>              :   /* fclose((FILE*)file_); */</span>
+<span id="L345"><span class="lineNum">     345</span> <span class="tlaGNC tlaBgGNC">           4 :   return ret;</span></span>
+<span id="L346"><span class="lineNum">     346</span>              : }</span>
+<span id="L347"><span class="lineNum">     347</span>              : </span>
+<span id="L348"><span class="lineNum">     348</span> <span class="tlaGNC">          21 : static Image::Loader::reader_t in_jai_checker(char buf[Image::Loader::MAGIC_LEN], char [Image::Loader::MAGIC_LEN], SimBuffer::Flat const&amp; loadHints, Image::Loader::UFD* ufd) {</span></span>
+<span id="L349"><span class="lineNum">     349</span> <span class="tlaGNC">          42 :   if (0!=memcmp(buf, &quot;\xff\xd8\xff&quot;, 3)</span></span>
+<span id="L350"><span class="lineNum">     350</span> <span class="tlaGNC">          21 :    || !(loadHints.findFirst((char const*)&quot;,jpeg-asis,&quot;,6)!=loadHints.getLength() || loadHints.findFirst((char const*)&quot;,asis,&quot;,6)!=loadHints.getLength())</span></span>
+<span id="L351"><span class="lineNum">     351</span> <span class="tlaGNC">          17 :      ) return 0;</span></span>
+<span id="L352"><span class="lineNum">     352</span> <span class="tlaGNC">           4 :   Filter::UngetFILED* ufdd=(Filter::UngetFILED*)ufd;</span></span>
+<span id="L353"><span class="lineNum">     353</span> <span class="tlaGNC">           4 :   ufdd-&gt;seek(0);</span></span>
+<span id="L354"><span class="lineNum">     354</span> <span class="tlaGNC">           4 :   Image::Loader::reader_t ret=jai_is_baseline_jpeg(ufdd) ? in_jai_reader : 0;</span></span>
+<span id="L355"><span class="lineNum">     355</span> <span class="tlaGNC">           4 :   ufdd-&gt;seek(0);</span></span>
+<span id="L356"><span class="lineNum">     356</span> <span class="tlaGNC">           4 :   return ret;</span></span>
+<span id="L357"><span class="lineNum">     357</span>              : }</span>
+<span id="L358"><span class="lineNum">     358</span>              : </span>
+<span id="L359"><span class="lineNum">     359</span>              : #if 0 /* Filter::FlatR* used by JPEGSOF0Encode::vi_write() in appliers.cpp */</span>
+<span id="L360"><span class="lineNum">     360</span>              : static inline int getc_(Filter::FlatR *f) { return f-&gt;getcc(); }</span>
+<span id="L361"><span class="lineNum">     361</span>              : static inline long ftell_(Filter::FlatR *f) { return f-&gt;tell(); }</span>
+<span id="L362"><span class="lineNum">     362</span>              : void jai_parse_jpeg(struct jai_gfxinfo *result, Filter::FlatR *f) {</span>
+<span id="L363"><span class="lineNum">     363</span>              :   jai_handle_jpeg(result, f);</span>
+<span id="L364"><span class="lineNum">     364</span>              : }</span>
+<span id="L365"><span class="lineNum">     365</span>              : void jai_parse_jpeg(struct jai_gfxinfo *result, FILE *f) {</span>
+<span id="L366"><span class="lineNum">     366</span>              :   jai_handle_jpeg(result, f);</span>
+<span id="L367"><span class="lineNum">     367</span>              : }</span>
+<span id="L368"><span class="lineNum">     368</span>              : #endif</span>
+<span id="L369"><span class="lineNum">     369</span>              : </span>
+<span id="L370"><span class="lineNum">     370</span>              : #if 0 /* unused */</span>
+<span id="L371"><span class="lineNum">     371</span>              : int jai_is_baseline_jpeg(char const* filename) {</span>
+<span id="L372"><span class="lineNum">     372</span>              :   /* by pts@fazekas.hu at Tue Mar 11 20:27:56 CET 2003 */</span>
+<span id="L373"><span class="lineNum">     373</span>              :   FILE *f=fopen(filename, &quot;rb&quot;);</span>
+<span id="L374"><span class="lineNum">     374</span>              :   if (!f) return -1;</span>
+<span id="L375"><span class="lineNum">     375</span>              :   Filter::FILED filed(f, /*closep:*/true);</span>
+<span id="L376"><span class="lineNum">     376</span>              :   return jai_is_baseline_jpeg(&amp;filed);</span>
+<span id="L377"><span class="lineNum">     377</span>              : }</span>
+<span id="L378"><span class="lineNum">     378</span>              : #endif</span>
+<span id="L379"><span class="lineNum">     379</span> <span class="tlaGNC">          14 : int jai_is_baseline_jpeg(/*DecoderTeller*/Filter::UngetFILED *fp) {</span></span>
+<span id="L380"><span class="lineNum">     380</span>              :   char buf[3];</span>
+<span id="L381"><span class="lineNum">     381</span>              :   struct jai_gfxinfo gi;</span>
+<span id="L382"><span class="lineNum">     382</span> <span class="tlaGNC">          14 :   bool qfalse=(3!=fp-&gt;vi_read(buf, 3) || 0!=memcmp(buf, &quot;\xff\xd8\xff&quot;, 3));</span></span>
+<span id="L383"><span class="lineNum">     383</span> <span class="tlaGNC">          14 :   fp-&gt;unread(buf, 3);</span></span>
+<span id="L384"><span class="lineNum">     384</span> <span class="tlaGNC">          14 :   if (qfalse) return false;</span></span>
+<span id="L385"><span class="lineNum">     385</span> <span class="tlaGNC">           8 :   fp-&gt;getFILE(/*seekable*/true); /* make it seekable, so the caller can seek back */</span></span>
+<span id="L386"><span class="lineNum">     386</span> <span class="tlaGNC">           8 :   jai_parse_jpeg(&amp;gi, fp, /*must_be_baseline:*/false);</span></span>
+<span id="L387"><span class="lineNum">     387</span> <span class="tlaGNC">           8 :   fp-&gt;seek(0);</span></span>
+<span id="L388"><span class="lineNum">     388</span> <span class="tlaGNC">           8 :   return gi.bad!=0 ? -1 : gi.SOF_type==0;</span></span>
+<span id="L389"><span class="lineNum">     389</span>              : }</span>
+<span id="L390"><span class="lineNum">     390</span>              : #else</span>
+<span id="L391"><span class="lineNum">     391</span>              : #define in_jai_checker (Image::Loader::checker_t)NULLP</span>
+<span id="L392"><span class="lineNum">     392</span>              : #endif /* USE_IN_JAI */</span>
+<span id="L393"><span class="lineNum">     393</span>              : </span>
+<span id="L394"><span class="lineNum">     394</span>              : Image::Loader in_jai_loader = { &quot;JAI&quot;, in_jai_checker, 0 };</span>
+        </pre>
+              </td>
+            </tr>
+          </table>
+          <br>
+
+          <table width="100%" border=0 cellspacing=0 cellpadding=0>
+            <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+            <tr><td class="versionInfo">Generated by: <a href="https://github.com//linux-test-project/lcov" target="_parent">LCOV version 2.0-1</a></td></tr>
+          </table>
+          <br>
+
+</body>
+</html>

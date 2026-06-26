@@ -1,0 +1,395 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - coverage.info - app/rule.hpp</title>
+  <link rel="stylesheet" type="text/css" href="../gcov.css">
+</head>
+
+<body>
+
+          <table width="100%" border=0 cellspacing=0 cellpadding=0>
+            <tr><td class="title">LCOV - code coverage report</td></tr>
+            <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+
+            <tr>
+              <td width="100%">
+                <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="10%" class="headerValue"><a href="../index.html">top level</a> - <a href="index.html">/app</a> - rule.hpp<span style="font-size: 80%;"> (source / <a href="rule.hpp.func-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="5%"></td>
+            <td width="5%" class="headerCovTableHead">Coverage</td>
+            <td width="5%" class="headerCovTableHead" title="Covered + Uncovered code">Total</td>
+            <td width="5%" class="headerCovTableHead" title="Exercised code only">Hit</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">coverage.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntryLo">0.0&nbsp;%</td>
+            <td class="headerCovTableEntry">1</td>
+            <td class="headerCovTableEntry">0</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test Date:</td>
+            <td class="headerValue">2026-06-26 13:21:55</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntryLo">0.0&nbsp;%</td>
+            <td class="headerCovTableEntry">1</td>
+            <td class="headerCovTableEntry">0</td>
+          </tr>
+                  <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+                </table>
+              </td>
+            </tr>
+
+            <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+          </table>
+
+          <table cellpadding=0 cellspacing=0 border=0>
+            <tr>
+              <td><br></td>
+            </tr>
+            <tr>
+              <td>
+<pre class="sourceHeading">            Line data    Source code</pre>
+<pre class="source">
+<span id="L1"><span class="lineNum">       1</span>              : /* rule.hpp -- Output rules</span>
+<span id="L2"><span class="lineNum">       2</span>              :  * by pts@fazekas.hu Fri Mar 15 15:11:38 CET 2002</span>
+<span id="L3"><span class="lineNum">       3</span>              :  */</span>
+<span id="L4"><span class="lineNum">       4</span>              : </span>
+<span id="L5"><span class="lineNum">       5</span>              : #ifdef __GNUC__</span>
+<span id="L6"><span class="lineNum">       6</span>              : #ifndef __clang__</span>
+<span id="L7"><span class="lineNum">       7</span>              : #pragma interface</span>
+<span id="L8"><span class="lineNum">       8</span>              : #endif</span>
+<span id="L9"><span class="lineNum">       9</span>              : #endif</span>
+<span id="L10"><span class="lineNum">      10</span>              : </span>
+<span id="L11"><span class="lineNum">      11</span>              : #ifndef RULE_HPP</span>
+<span id="L12"><span class="lineNum">      12</span>              : #define RULE_HPP 1</span>
+<span id="L13"><span class="lineNum">      13</span>              : </span>
+<span id="L14"><span class="lineNum">      14</span>              : #include &quot;config2.h&quot;</span>
+<span id="L15"><span class="lineNum">      15</span>              : #include &quot;gensio.hpp&quot;</span>
+<span id="L16"><span class="lineNum">      16</span>              : #include &quot;image.hpp&quot;</span>
+<span id="L17"><span class="lineNum">      17</span>              : #include &quot;minips.hpp&quot;</span>
+<span id="L18"><span class="lineNum">      18</span>              : </span>
+<span id="L19"><span class="lineNum">      19</span>              : /** a namespace */</span>
+<span id="L20"><span class="lineNum">      20</span>              : class Rule { public:</span>
+<span id="L21"><span class="lineNum">      21</span>              :   struct Cache {</span>
+<span id="L22"><span class="lineNum">      22</span>              :     bool WarningOK;</span>
+<span id="L23"><span class="lineNum">      23</span>              :     BEGIN_STATIC_ENUM(unsigned char,ff_t)</span>
+<span id="L24"><span class="lineNum">      24</span>              :       FF_default=0, /* only for one-liner */</span>
+<span id="L25"><span class="lineNum">      25</span>              :       FF_eps=71, /* only for one-liner, temporary */</span>
+<span id="L26"><span class="lineNum">      26</span>              :       FF_pdf=72, /* only for one-liner, temporary */</span>
+<span id="L27"><span class="lineNum">      27</span>              :       FF_pdfb=73, /* only for one-liner, temporary */</span>
+<span id="L28"><span class="lineNum">      28</span>              :       FF_PSL1=110,</span>
+<span id="L29"><span class="lineNum">      29</span>              :       FF_PSLC=115,</span>
+<span id="L30"><span class="lineNum">      30</span>              :       FF_PSL2=120,</span>
+<span id="L31"><span class="lineNum">      31</span>              :       FF_PSL3=130,</span>
+<span id="L32"><span class="lineNum">      32</span>              :       FF_PDFB10=90,</span>
+<span id="L33"><span class="lineNum">      33</span>              :       FF_PDFB12=92,</span>
+<span id="L34"><span class="lineNum">      34</span>              :       FF_PDF10=80,</span>
+<span id="L35"><span class="lineNum">      35</span>              :       FF_PDF12=82,</span>
+<span id="L36"><span class="lineNum">      36</span>              :       FF_GIF89a=1,</span>
+<span id="L37"><span class="lineNum">      37</span>              :       FF_PNM=2,</span>
+<span id="L38"><span class="lineNum">      38</span>              :       FF_PAM=3,</span>
+<span id="L39"><span class="lineNum">      39</span>              :       FF_PIP=4, /* Portable Indexed file format by pts */</span>
+<span id="L40"><span class="lineNum">      40</span>              :       FF_Empty=5,</span>
+<span id="L41"><span class="lineNum">      41</span>              :       FF_Meta=6,</span>
+<span id="L42"><span class="lineNum">      42</span>              :       FF_JPEG=7,</span>
+<span id="L43"><span class="lineNum">      43</span>              :       FF_TIFF=8,</span>
+<span id="L44"><span class="lineNum">      44</span>              :       FF_PNG=9,</span>
+<span id="L45"><span class="lineNum">      45</span>              :       FF_XPM=10,</span>
+<span id="L46"><span class="lineNum">      46</span>              :       FF_BMP=11,</span>
+<span id="L47"><span class="lineNum">      47</span>              :       FF_XWD=12,</span>
+<span id="L48"><span class="lineNum">      48</span>              :       FF_X11=13  /* Don't add a comma, gcc-4.8.1. can't compile it that way. */</span>
+<span id="L49"><span class="lineNum">      49</span>              :     END_STATIC_ENUM()</span>
+<span id="L50"><span class="lineNum">      50</span>              :     ff_t FileFormat;</span>
+<span id="L51"><span class="lineNum">      51</span>              :     Image::sf_t SampleFormat;</span>
+<span id="L52"><span class="lineNum">      52</span>              :     /** Used only in appliers.cpp when _check_rule() changes SampleFormat so</span>
+<span id="L53"><span class="lineNum">      53</span>              :      * setSampleFormat() called before _work() would set that dummy</span>
+<span id="L54"><span class="lineNum">      54</span>              :      * SampleFormat.</span>
+<span id="L55"><span class="lineNum">      55</span>              :      */</span>
+<span id="L56"><span class="lineNum">      56</span>              :     Image::sf_t origSampleFormat;</span>
+<span id="L57"><span class="lineNum">      57</span>              :     BEGIN_STATIC_ENUM(unsigned char,te_t)</span>
+<span id="L58"><span class="lineNum">      58</span>              :       TE_default=0, /* only for one-liner */</span>
+<span id="L59"><span class="lineNum">      59</span>              :       TE_Binary=1,</span>
+<span id="L60"><span class="lineNum">      60</span>              :       TE_ASCII=2,</span>
+<span id="L61"><span class="lineNum">      61</span>              :       TE_Hex=3,</span>
+<span id="L62"><span class="lineNum">      62</span>              :       TE_A85=4,</span>
+<span id="L63"><span class="lineNum">      63</span>              :       TE_MSBfirst=5,</span>
+<span id="L64"><span class="lineNum">      64</span>              :       TE_LSBfirst=6</span>
+<span id="L65"><span class="lineNum">      65</span>              :     END_STATIC_ENUM()</span>
+<span id="L66"><span class="lineNum">      66</span>              :     te_t TransferEncoding;</span>
+<span id="L67"><span class="lineNum">      67</span>              :    </span>
+<span id="L68"><span class="lineNum">      68</span>              :     BEGIN_STATIC_ENUM(unsigned char,co_t)</span>
+<span id="L69"><span class="lineNum">      69</span>              :       CO_default=0, /* only for one-liner */</span>
+<span id="L70"><span class="lineNum">      70</span>              :       CO_None=1,</span>
+<span id="L71"><span class="lineNum">      71</span>              :       CO_LZW=2,</span>
+<span id="L72"><span class="lineNum">      72</span>              :       CO_ZIP=3,</span>
+<span id="L73"><span class="lineNum">      73</span>              :       CO_RLE=4,</span>
+<span id="L74"><span class="lineNum">      74</span>              :       CO_Fax=5,</span>
+<span id="L75"><span class="lineNum">      75</span>              :       CO_DCT=6,</span>
+<span id="L76"><span class="lineNum">      76</span>              :       CO_IJG=7,</span>
+<span id="L77"><span class="lineNum">      77</span>              :       CO_JAI=8,</span>
+<span id="L78"><span class="lineNum">      78</span>              :       CO_max=8</span>
+<span id="L79"><span class="lineNum">      79</span>              :     END_STATIC_ENUM()</span>
+<span id="L80"><span class="lineNum">      80</span>              :     co_t Compression;</span>
+<span id="L81"><span class="lineNum">      81</span>              : </span>
+<span id="L82"><span class="lineNum">      82</span>              :     BEGIN_STATIC_ENUM(unsigned char,pr_t)</span>
+<span id="L83"><span class="lineNum">      83</span>              :       PR_None=1,</span>
+<span id="L84"><span class="lineNum">      84</span>              :       PR_TIFF2=2,</span>
+<span id="L85"><span class="lineNum">      85</span>              :       PR_PNGNone=10, PR_PNG=10,</span>
+<span id="L86"><span class="lineNum">      86</span>              :       PR_PNGSub=11,</span>
+<span id="L87"><span class="lineNum">      87</span>              :       PR_PNGUP=12,</span>
+<span id="L88"><span class="lineNum">      88</span>              :       PR_PNGAverage=13,</span>
+<span id="L89"><span class="lineNum">      89</span>              :       PR_PNGPaeth=14,</span>
+<span id="L90"><span class="lineNum">      90</span>              :       PR_PNGAuto=15,</span>
+<span id="L91"><span class="lineNum">      91</span>              :       PR_PNGAutoMaybe=25,</span>
+<span id="L92"><span class="lineNum">      92</span>              :       PR_PNGAutoBadUnsigned=45,</span>
+<span id="L93"><span class="lineNum">      93</span>              :       PR_PNGAutoBadSigned=55</span>
+<span id="L94"><span class="lineNum">      94</span>              :     END_STATIC_ENUM()</span>
+<span id="L95"><span class="lineNum">      95</span>              :     pr_t Predictor;</span>
+<span id="L96"><span class="lineNum">      96</span>              : </span>
+<span id="L97"><span class="lineNum">      97</span>              :     Image::Sampled::rgb_t Transparent;</span>
+<span id="L98"><span class="lineNum">      98</span>              :     </span>
+<span id="L99"><span class="lineNum">      99</span>              :     bool isOneBit() const;</span>
+<span id="L100"><span class="lineNum">     100</span>              :     bool isPDF() const;</span>
+<span id="L101"><span class="lineNum">     101</span>              :     bool isPDFB() const;</span>
+<span id="L102"><span class="lineNum">     102</span>              :     bool isPS() const;</span>
+<span id="L103"><span class="lineNum">     103</span>              :     bool isPSL2() const;</span>
+<span id="L104"><span class="lineNum">     104</span>              :     bool isPSL3() const;</span>
+<span id="L105"><span class="lineNum">     105</span>              :     bool hasPredictor() const;</span>
+<span id="L106"><span class="lineNum">     106</span>              :     bool isIndexed() const;</span>
+<span id="L107"><span class="lineNum">     107</span>              :     bool isTransparentM() const;</span>
+<span id="L108"><span class="lineNum">     108</span>              :     bool isGray() const;</span>
+<span id="L109"><span class="lineNum">     109</span>              :     bool isRGB() const;</span>
+<span id="L110"><span class="lineNum">     110</span>              :     bool isDCTE() const;</span>
+<span id="L111"><span class="lineNum">     111</span>              :     bool isBinSB() const;</span>
+<span id="L112"><span class="lineNum">     112</span>              :     /** /Compression/ZIP not OK with /PSL1, /PSLC, /PSL2, /PDF10, /PDFB10 */</span>
+<span id="L113"><span class="lineNum">     113</span>              :     bool isZIPOK() const;</span>
+<span id="L114"><span class="lineNum">     114</span>              :     // bool is8() const;</span>
+<span id="L115"><span class="lineNum">     115</span>              : </span>
+<span id="L116"><span class="lineNum">     116</span>              :     /** @param s is case insensitive, leading `/' is optional.</span>
+<span id="L117"><span class="lineNum">     117</span>              :      * @return SF_max if not found, or a valid SF_... constant</span>
+<span id="L118"><span class="lineNum">     118</span>              :      */</span>
+<span id="L119"><span class="lineNum">     119</span>              :     static Image::sf_t parseSampleFormat(char const*s, slen_t slen);</span>
+<span id="L120"><span class="lineNum">     120</span>              :     static char const* dumpFileFormat(ff_t FileFormat, co_t Compression=CO_default);</span>
+<span id="L121"><span class="lineNum">     121</span>              :     static char const* dumpTransferEncoding(te_t TransferEncoding);</span>
+<span id="L122"><span class="lineNum">     122</span>              :     static char const* dumpSampleFormat(Image::sf_t SampleFormat);</span>
+<span id="L123"><span class="lineNum">     123</span>              :     static char const* dumpCompression(co_t Compression);</span>
+<span id="L124"><span class="lineNum">     124</span>              :   };</span>
+<span id="L125"><span class="lineNum">     125</span>              :   </span>
+<span id="L126"><span class="lineNum">     126</span>              :   struct CacheHints {</span>
+<span id="L127"><span class="lineNum">     127</span>              :     BEGIN_STATIC_ENUM(unsigned char,sc_t) /* Fri Aug 16 16:33:47 CEST 2002 */</span>
+<span id="L128"><span class="lineNum">     128</span>              :       SC_default=0,</span>
+<span id="L129"><span class="lineNum">     129</span>              :       SC_None=1,</span>
+<span id="L130"><span class="lineNum">     130</span>              :       SC_OK=2,</span>
+<span id="L131"><span class="lineNum">     131</span>              :       SC_RotateOK=3</span>
+<span id="L132"><span class="lineNum">     132</span>              :     END_STATIC_ENUM()</span>
+<span id="L133"><span class="lineNum">     133</span>              :     sc_t Scale;</span>
+<span id="L134"><span class="lineNum">     134</span>              : </span>
+<span id="L135"><span class="lineNum">     135</span>              :     /* Image dimensions for encoding filters (may be different from real</span>
+<span id="L136"><span class="lineNum">     136</span>              :      * image dimensions, but _really_ disrecommended).</span>
+<span id="L137"><span class="lineNum">     137</span>              :      * slen_t important becasuse of separate().</span>
+<span id="L138"><span class="lineNum">     138</span>              :      */</span>
+<span id="L139"><span class="lineNum">     139</span>              :     slen_t EncoderColumns, EncoderBPL, EncoderRows;</span>
+<span id="L140"><span class="lineNum">     140</span>              :     /** Number of color components (channels) per pixel. */</span>
+<span id="L141"><span class="lineNum">     141</span>              :     unsigned char EncoderColors;</span>
+<span id="L142"><span class="lineNum">     142</span>              :     slen_t PredictorColumns;</span>
+<span id="L143"><span class="lineNum">     143</span>              :     unsigned char PredictorBPC, PredictorColors;</span>
+<span id="L144"><span class="lineNum">     144</span>              :     unsigned ColorTransform;</span>
+<span id="L145"><span class="lineNum">     145</span>              :     signed Effort;</span>
+<span id="L146"><span class="lineNum">     146</span>              :     slen_t RecordSize;</span>
+<span id="L147"><span class="lineNum">     147</span>              :     slendiff_t K;</span>
+<span id="L148"><span class="lineNum">     148</span>              :     /* JPEG quality for the IJG encoding filter */</span>
+<span id="L149"><span class="lineNum">     149</span>              :     unsigned char Quality;</span>
+<span id="L150"><span class="lineNum">     150</span>              :     unsigned TransferCPL;</span>
+<span id="L151"><span class="lineNum">     151</span>              :     MiniPS::String *Comment, *Title, *Subject, *Author, *Creator, *Producer;</span>
+<span id="L152"><span class="lineNum">     152</span>              :     MiniPS::String *Created, *Produced;</span>
+<span id="L153"><span class="lineNum">     153</span>              :     MiniPS::Dict *DCT;</span>
+<span id="L154"><span class="lineNum">     154</span>              :     /** MiniPS::Real* or integer */</span>
+<span id="L155"><span class="lineNum">     155</span>              :     MiniPS::VALUE TopMargin, BottomMargin, LeftMargin, RightMargin;</span>
+<span id="L156"><span class="lineNum">     156</span>              :     /** MiniPS::Real* or integer. Specifies the dimension the image should</span>
+<span id="L157"><span class="lineNum">     157</span>              :      * be lowered below the baseline for (PostScript or PDF) output with</span>
+<span id="L158"><span class="lineNum">     158</span>              :      * /Scale/None. Default to 0.</span>
+<span id="L159"><span class="lineNum">     159</span>              :      */</span>
+<span id="L160"><span class="lineNum">     160</span>              :     MiniPS::VALUE LowerMargin;</span>
+<span id="L161"><span class="lineNum">     161</span>              :     /** 72 by default. */</span>
+<span id="L162"><span class="lineNum">     162</span>              :     MiniPS::VALUE ImageDPI;</span>
+<span id="L163"><span class="lineNum">     163</span>              :     static char const* dumpScale(sc_t Scale);</span>
+<span id="L164"><span class="lineNum">     164</span>              :   };</span>
+<span id="L165"><span class="lineNum">     165</span>              : </span>
+<span id="L166"><span class="lineNum">     166</span>              :   struct OutputRule {</span>
+<span id="L167"><span class="lineNum">     167</span>              :     Cache cache;</span>
+<span id="L168"><span class="lineNum">     168</span>              :     CacheHints cacheHints;</span>
+<span id="L169"><span class="lineNum">     169</span>              :     MiniPS::Dict* dict;</span>
+<span id="L170"><span class="lineNum">     170</span>              :     /* /Hints entry in dict */</span>
+<span id="L171"><span class="lineNum">     171</span>              :     MiniPS::Dict* dictHints;</span>
+<span id="L172"><span class="lineNum">     172</span>              :     /* Number of this output rule, as appeared in .job. Imp: name */</span>
+<span id="L173"><span class="lineNum">     173</span>              :     unsigned c;</span>
+<span id="L174"><span class="lineNum">     174</span> <span class="tlaUNC tlaBgUNC">           0 :     inline bool isEOL() const { return dictHints==NULLP; }</span></span>
+<span id="L175"><span class="lineNum">     175</span>              :     /** In: dict, dictHints, cache and cacheHints is uninitialized. Out: they</span>
+<span id="L176"><span class="lineNum">     176</span>              :      * get inititalized from param. Errors might occur and error messages</span>
+<span id="L177"><span class="lineNum">     177</span>              :      * might get printed.</span>
+<span id="L178"><span class="lineNum">     178</span>              :      */</span>
+<span id="L179"><span class="lineNum">     179</span>              :     void fromDict(MiniPS::VALUE);</span>
+<span id="L180"><span class="lineNum">     180</span>              :     /** Calls info-&gt;setSampleFormat(), and sets cacheHints.PredictorColumns</span>
+<span id="L181"><span class="lineNum">     181</span>              :      * and some other fields if they are zero (unspecified in the .job file)</span>
+<span id="L182"><span class="lineNum">     182</span>              :      */</span>
+<span id="L183"><span class="lineNum">     183</span>              :     void doSampleFormat(Image::SampledInfo *info, bool separate=false);</span>
+<span id="L184"><span class="lineNum">     184</span>              :     /** Appends &quot;&quot; when CO_None,</span>
+<span id="L185"><span class="lineNum">     185</span>              :      * &quot;&lt;&lt;/K ... /Columns ...&gt;&gt;/CCITTFaxDecode filter&quot; when CO_Fax</span>
+<span id="L186"><span class="lineNum">     186</span>              :      * &quot;/...Decode filter&quot; otherwise</span>
+<span id="L187"><span class="lineNum">     187</span>              :      * Calls appendPredictorSpec() if necessary.</span>
+<span id="L188"><span class="lineNum">     188</span>              :      * For PDF (not PS!), implies appendTransferSpec().</span>
+<span id="L189"><span class="lineNum">     189</span>              :      */</span>
+<span id="L190"><span class="lineNum">     190</span>              :     void appendDecoderSpec(GenBuffer::Writable &amp;out) const;</span>
+<span id="L191"><span class="lineNum">     191</span>              :     /** Appends &quot;&quot; when PR_None or</span>
+<span id="L192"><span class="lineNum">     192</span>              :      * appends &quot;&lt;&lt;/BitsPerComponent.../Colors.../Columns.../Predictor 2&gt;&gt;&quot; or</span>
+<span id="L193"><span class="lineNum">     193</span>              :      * appends &quot;&lt;&lt;/BitsPerComponent.../Colors.../Columns.../Predictor 10&gt;&gt;&quot;</span>
+<span id="L194"><span class="lineNum">     194</span>              :      * appends &quot;&lt;&lt;/K ...&gt;&gt;&quot;</span>
+<span id="L195"><span class="lineNum">     195</span>              :      */</span>
+<span id="L196"><span class="lineNum">     196</span>              :     void appendPredictorSpec(GenBuffer::Writable &amp;out) const;</span>
+<span id="L197"><span class="lineNum">     197</span>              :     /** Appends &quot;&quot; or &quot;/ASCII85Decode filter&quot; or &quot;/ASCIIHexDecode filter&quot;</span>
+<span id="L198"><span class="lineNum">     198</span>              :      */</span>
+<span id="L199"><span class="lineNum">     199</span>              :     void appendTransferSpec(GenBuffer::Writable &amp;out) const;</span>
+<span id="L200"><span class="lineNum">     200</span>              :     bool hasPredictorSpec() const;</span>
+<span id="L201"><span class="lineNum">     201</span>              :   };</span>
+<span id="L202"><span class="lineNum">     202</span>              :   </span>
+<span id="L203"><span class="lineNum">     203</span>              :   struct Applier {</span>
+<span id="L204"><span class="lineNum">     204</span>              :     BEGIN_STATIC_ENUM(unsigned,cons_t)</span>
+<span id="L205"><span class="lineNum">     205</span>              :       DONT_KNOW=0, BAD=1, MAYBE=2, OK=3</span>
+<span id="L206"><span class="lineNum">     206</span>              :     END_STATIC_ENUM()</span>
+<span id="L207"><span class="lineNum">     207</span>              :     /** Checks the specified OutputRule for internal consistency, updates</span>
+<span id="L208"><span class="lineNum">     208</span>              :      * the `or-&gt;cache', emits warnings, and returns consistency status</span>
+<span id="L209"><span class="lineNum">     209</span>              :      * information.</span>
+<span id="L210"><span class="lineNum">     210</span>              :      *</span>
+<span id="L211"><span class="lineNum">     211</span>              :      * -- If (this) Applier doesn't know how to handle the OutputRule, returns</span>
+<span id="L212"><span class="lineNum">     212</span>              :      *    DONT_KNOW immediately.</span>
+<span id="L213"><span class="lineNum">     213</span>              :      * -- If (this) Applier knows that the OutputRule is internally</span>
+<span id="L214"><span class="lineNum">     214</span>              :      *    inconsistent or proved to be unsupported (i.e printing JPEG images</span>
+<span id="L215"><span class="lineNum">     215</span>              :      *    on PostScript Level1 printers), regardless of the image itself, it</span>
+<span id="L216"><span class="lineNum">     216</span>              :      *    returns BAD immediately and emits a warning about the reason.</span>
+<span id="L217"><span class="lineNum">     217</span>              :      * -- If (this) Applier knows that the OutputRule may or may not be</span>
+<span id="L218"><span class="lineNum">     218</span>              :      *    processed, depending on the actual image, then MAYBE is returned.</span>
+<span id="L219"><span class="lineNum">     219</span>              :      * -- If (this) Applier knows that the OutputRule can be processed on</span>
+<span id="L220"><span class="lineNum">     220</span>              :      *    any image, then OK is returned.</span>
+<span id="L221"><span class="lineNum">     221</span>              :      */</span>
+<span id="L222"><span class="lineNum">     222</span>              :     typedef cons_t(*check_rule_t)(OutputRule* or_);</span>
+<span id="L223"><span class="lineNum">     223</span>              :     </span>
+<span id="L224"><span class="lineNum">     224</span>              :     /** Outputs (writes) the PostScript or PDF presentation of the image</span>
+<span id="L225"><span class="lineNum">     225</span>              :      * specified in param `sf' to the output stream in param `out', using</span>
+<span id="L226"><span class="lineNum">     226</span>              :      * the Output Rule specified in param `or'.</span>
+<span id="L227"><span class="lineNum">     227</span>              :      * @return DONT_KNOW if doesn't know how to handle the OutputRule;</span>
+<span id="L228"><span class="lineNum">     228</span>              :      *         BAD if it is sure that the image cannot be written with the</span>
+<span id="L229"><span class="lineNum">     229</span>              :      *             specified OutputRule;</span>
+<span id="L230"><span class="lineNum">     230</span>              :      *         OK if writing was successful     </span>
+<span id="L231"><span class="lineNum">     231</span>              :      */</span>
+<span id="L232"><span class="lineNum">     232</span>              :     typedef cons_t(*work_t)(GenBuffer::Writable&amp; out, OutputRule*or_, Image::SampledInfo *sf);</span>
+<span id="L233"><span class="lineNum">     233</span>              :     </span>
+<span id="L234"><span class="lineNum">     234</span>              :     /** A short, informal description of this Applier. */</span>
+<span id="L235"><span class="lineNum">     235</span>              :     char const*format;</span>
+<span id="L236"><span class="lineNum">     236</span>              :     check_rule_t check_rule;</span>
+<span id="L237"><span class="lineNum">     237</span>              :     /** May be NULLP if `check_rule' never returns OK or MAYBE */</span>
+<span id="L238"><span class="lineNum">     238</span>              :     work_t work;</span>
+<span id="L239"><span class="lineNum">     239</span>              :     /** Null or next Applier to probe. Filled by register0(); */</span>
+<span id="L240"><span class="lineNum">     240</span>              :     Applier *next;</span>
+<span id="L241"><span class="lineNum">     241</span>              :   };</span>
+<span id="L242"><span class="lineNum">     242</span>              :   </span>
+<span id="L243"><span class="lineNum">     243</span>              :   /* Registers a new type of output Applier, i.e a new output file</span>
+<span id="L244"><span class="lineNum">     244</span>              :    * format/method. The new output format will be put in front of all others,</span>
+<span id="L245"><span class="lineNum">     245</span>              :    * and will be checked first by apply_best().</span>
+<span id="L246"><span class="lineNum">     246</span>              :    */</span>
+<span id="L247"><span class="lineNum">     247</span>              :   static void register0(Applier*);</span>
+<span id="L248"><span class="lineNum">     248</span>              :   /* Loads the image contained in te file `filename'. */</span>
+<span id="L249"><span class="lineNum">     249</span>              :   </span>
+<span id="L250"><span class="lineNum">     250</span>              :   /** Builds the list of available profiles from the Profile element read</span>
+<span id="L251"><span class="lineNum">     251</span>              :    * from a .job file. To do the task, calls check_rule() of all registered (!)</span>
+<span id="L252"><span class="lineNum">     252</span>              :    * Appliers. Also calls OutputRule::fromDict for each profile element.</span>
+<span id="L253"><span class="lineNum">     253</span>              :    * All returned OutputRules have an Applier which returned OK or MAYBE.</span>
+<span id="L254"><span class="lineNum">     254</span>              :    * @return a dict==NULLP-terminated list of OutputRules</span>
+<span id="L255"><span class="lineNum">     255</span>              :    */</span>
+<span id="L256"><span class="lineNum">     256</span>              :   static OutputRule* buildProfile(MiniPS::VALUE Profile, bool quiet=false);</span>
+<span id="L257"><span class="lineNum">     257</span>              : </span>
+<span id="L258"><span class="lineNum">     258</span>              :   /** Applies the Profile specified in param `rule_list' to the image</span>
+<span id="L259"><span class="lineNum">     259</span>              :    * specified in param `sf', and writes the output to param `out'.</span>
+<span id="L260"><span class="lineNum">     260</span>              :    */</span>
+<span id="L261"><span class="lineNum">     261</span>              :   static void applyProfile(GenBuffer::Writable&amp; out, OutputRule*rule_list, Image::SampledInfo *sf);</span>
+<span id="L262"><span class="lineNum">     262</span>              :   </span>
+<span id="L263"><span class="lineNum">     263</span>              :   /** Frees memory associated with a profile returned by buildProfile() */</span>
+<span id="L264"><span class="lineNum">     264</span>              :   static void deleteProfile(OutputRule*);</span>
+<span id="L265"><span class="lineNum">     265</span>              : </span>
+<span id="L266"><span class="lineNum">     266</span>              :   static unsigned printAppliers(GenBuffer::Writable &amp;out);</span>
+<span id="L267"><span class="lineNum">     267</span>              : </span>
+<span id="L268"><span class="lineNum">     268</span>              : </span>
+<span id="L269"><span class="lineNum">     269</span>              :   typedef void (*stream_writer_t)(GenBuffer::Writable&amp;out, GenBuffer::Writable&amp;outstream, Image::SampledInfo *sf);</span>
+<span id="L270"><span class="lineNum">     270</span>              : </span>
+<span id="L271"><span class="lineNum">     271</span>              :   /** Writes a PS/PDF file to `out' according to `template_': substitutes</span>
+<span id="L272"><span class="lineNum">     272</span>              :    * actual image (pixel) data from `sf-&gt;getImg()', and substitutes image</span>
+<span id="L273"><span class="lineNum">     273</span>              :    * metadata from `sf'. `outstream' should be a prepared stream (top of chain</span>
+<span id="L274"><span class="lineNum">     274</span>              :    * of Encode filters).</span>
+<span id="L275"><span class="lineNum">     275</span>              :    *   See a .tte file for an example template.</span>
+<span id="L276"><span class="lineNum">     276</span>              :    */</span>
+<span id="L277"><span class="lineNum">     277</span>              :   static void writeTTE(</span>
+<span id="L278"><span class="lineNum">     278</span>              :     GenBuffer::Writable&amp; out,</span>
+<span id="L279"><span class="lineNum">     279</span>              :     GenBuffer::Writable&amp; outpal,</span>
+<span id="L280"><span class="lineNum">     280</span>              :     GenBuffer::Writable&amp; outstream,</span>
+<span id="L281"><span class="lineNum">     281</span>              :     char const*template_,</span>
+<span id="L282"><span class="lineNum">     282</span>              :     Rule::OutputRule*or_,</span>
+<span id="L283"><span class="lineNum">     283</span>              :     Image::SampledInfo *sf,</span>
+<span id="L284"><span class="lineNum">     284</span>              :     stream_writer_t stream_writer,</span>
+<span id="L285"><span class="lineNum">     285</span>              :     char const*const*strings=(char**)NULLP);</span>
+<span id="L286"><span class="lineNum">     286</span>              : </span>
+<span id="L287"><span class="lineNum">     287</span>              :   /** Doesn't invoke MiniPS::delete0(chunkArray); */</span>
+<span id="L288"><span class="lineNum">     288</span>              :   static void writeTTM(</span>
+<span id="L289"><span class="lineNum">     289</span>              :    Filter::VerbatimE &amp;outve,</span>
+<span id="L290"><span class="lineNum">     290</span>              :    GenBuffer::Writable&amp;outpal,</span>
+<span id="L291"><span class="lineNum">     291</span>              :    GenBuffer::Writable&amp;outstream,</span>
+<span id="L292"><span class="lineNum">     292</span>              :    MiniPS::Array *chunkArray,</span>
+<span id="L293"><span class="lineNum">     293</span>              :    Rule::OutputRule*or_,</span>
+<span id="L294"><span class="lineNum">     294</span>              :    Image::SampledInfo *sf,</span>
+<span id="L295"><span class="lineNum">     295</span>              :    stream_writer_t stream_writer,</span>
+<span id="L296"><span class="lineNum">     296</span>              :    char const*const*strings=(char**)NULLP);</span>
+<span id="L297"><span class="lineNum">     297</span>              : </span>
+<span id="L298"><span class="lineNum">     298</span>              :   /** Used by writeTTT() to find template specification by name */</span>
+<span id="L299"><span class="lineNum">     299</span>              :   static MiniPS::Dict* Templates;</span>
+<span id="L300"><span class="lineNum">     300</span>              :   /** @param out must be of type Filter::VerbatimE if the template is a TTM</span>
+<span id="L301"><span class="lineNum">     301</span>              :    * array.</span>
+<span id="L302"><span class="lineNum">     302</span>              :    * @param template_key a key in file bts.ttt</span>
+<span id="L303"><span class="lineNum">     303</span>              :    */</span>
+<span id="L304"><span class="lineNum">     304</span>              :   static void writeTTT(</span>
+<span id="L305"><span class="lineNum">     305</span>              :    GenBuffer::Writable&amp;out,</span>
+<span id="L306"><span class="lineNum">     306</span>              :    GenBuffer::Writable&amp;outpal,</span>
+<span id="L307"><span class="lineNum">     307</span>              :    GenBuffer::Writable&amp;outstream,</span>
+<span id="L308"><span class="lineNum">     308</span>              :    char const *template_key,</span>
+<span id="L309"><span class="lineNum">     309</span>              :    Rule::OutputRule*or_,</span>
+<span id="L310"><span class="lineNum">     310</span>              :    Image::SampledInfo *sf,</span>
+<span id="L311"><span class="lineNum">     311</span>              :    stream_writer_t stream_writer,</span>
+<span id="L312"><span class="lineNum">     312</span>              :    char const*const*strings=(char**)NULLP);</span>
+<span id="L313"><span class="lineNum">     313</span>              : </span>
+<span id="L314"><span class="lineNum">     314</span>              :   static void writeData(GenBuffer::Writable&amp; out, GenBuffer::Writable&amp;outstream, Image::SampledInfo *sf);</span>
+<span id="L315"><span class="lineNum">     315</span>              :   static void writePalData(GenBuffer::Writable&amp; out, GenBuffer::Writable&amp;outstream, Image::SampledInfo *sf);</span>
+<span id="L316"><span class="lineNum">     316</span>              : </span>
+<span id="L317"><span class="lineNum">     317</span>              : };</span>
+<span id="L318"><span class="lineNum">     318</span>              : </span>
+<span id="L319"><span class="lineNum">     319</span>              : #endif</span>
+        </pre>
+              </td>
+            </tr>
+          </table>
+          <br>
+
+          <table width="100%" border=0 cellspacing=0 cellpadding=0>
+            <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+            <tr><td class="versionInfo">Generated by: <a href="https://github.com//linux-test-project/lcov" target="_parent">LCOV version 2.0-1</a></td></tr>
+          </table>
+          <br>
+
+</body>
+</html>

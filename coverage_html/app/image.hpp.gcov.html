@@ -1,0 +1,481 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - coverage.info - app/image.hpp</title>
+  <link rel="stylesheet" type="text/css" href="../gcov.css">
+</head>
+
+<body>
+
+          <table width="100%" border=0 cellspacing=0 cellpadding=0>
+            <tr><td class="title">LCOV - code coverage report</td></tr>
+            <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+
+            <tr>
+              <td width="100%">
+                <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="10%" class="headerValue"><a href="../index.html">top level</a> - <a href="index.html">/app</a> - image.hpp<span style="font-size: 80%;"> (source / <a href="image.hpp.func-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="5%"></td>
+            <td width="5%" class="headerCovTableHead">Coverage</td>
+            <td width="5%" class="headerCovTableHead" title="Covered + Uncovered code">Total</td>
+            <td width="5%" class="headerCovTableHead" title="Exercised code only">Hit</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">coverage.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntryLo">60.0&nbsp;%</td>
+            <td class="headerCovTableEntry">25</td>
+            <td class="headerCovTableEntry">15</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test Date:</td>
+            <td class="headerValue">2026-06-26 13:21:55</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntryLo">55.6&nbsp;%</td>
+            <td class="headerCovTableEntry">27</td>
+            <td class="headerCovTableEntry">15</td>
+          </tr>
+                  <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+                </table>
+              </td>
+            </tr>
+
+            <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+          </table>
+
+          <table cellpadding=0 cellspacing=0 border=0>
+            <tr>
+              <td><br></td>
+            </tr>
+            <tr>
+              <td>
+<pre class="sourceHeading">            Line data    Source code</pre>
+<pre class="source">
+<span id="L1"><span class="lineNum">       1</span>              : /* image.hpp -- classes for sampled (indexed, gray and rgb) images</span>
+<span id="L2"><span class="lineNum">       2</span>              :  * by pts@fazekas.hu Wed Feb 27 09:24:47 CET 2002</span>
+<span id="L3"><span class="lineNum">       3</span>              :  */</span>
+<span id="L4"><span class="lineNum">       4</span>              : /* Imp: keep future transparency in toIndexed(...) */</span>
+<span id="L5"><span class="lineNum">       5</span>              : </span>
+<span id="L6"><span class="lineNum">       6</span>              : #ifdef __GNUC__</span>
+<span id="L7"><span class="lineNum">       7</span>              : #ifndef __clang__</span>
+<span id="L8"><span class="lineNum">       8</span>              : #pragma interface</span>
+<span id="L9"><span class="lineNum">       9</span>              : #endif</span>
+<span id="L10"><span class="lineNum">      10</span>              : #endif</span>
+<span id="L11"><span class="lineNum">      11</span>              : </span>
+<span id="L12"><span class="lineNum">      12</span>              : #ifndef SAMPLED_HPP</span>
+<span id="L13"><span class="lineNum">      13</span>              : #define SAMPLED_HPP 1</span>
+<span id="L14"><span class="lineNum">      14</span>              : </span>
+<span id="L15"><span class="lineNum">      15</span>              : #include &quot;config2.h&quot;</span>
+<span id="L16"><span class="lineNum">      16</span>              : #include &quot;gensi.hpp&quot;</span>
+<span id="L17"><span class="lineNum">      17</span>              : </span>
+<span id="L18"><span class="lineNum">      18</span>              : class Image {</span>
+<span id="L19"><span class="lineNum">      19</span>              :  public:</span>
+<span id="L20"><span class="lineNum">      20</span>              :   class RGB;</span>
+<span id="L21"><span class="lineNum">      21</span>              :   class Gray;</span>
+<span id="L22"><span class="lineNum">      22</span>              :   class Indexed;</span>
+<span id="L23"><span class="lineNum">      23</span>              :   /** Generic, sampled, rectangular image data. Abstract class.</span>
+<span id="L24"><span class="lineNum">      24</span>              :    * Each sample is 1, 2, 4 or 8 bits. Regions:</span>
+<span id="L25"><span class="lineNum">      25</span>              :    * beg..head-1: comment, ignored (e.g unused part of the indexed palette)</span>
+<span id="L26"><span class="lineNum">      26</span>              :    * headp..rowbeg-1: header: not predicted or compressed (e.g the indexed palette)</span>
+<span id="L27"><span class="lineNum">      27</span>              :    * rowbeg+0*rlen..rowbeg+0*rlen+rlen-1: sample data of the 0th row, compressed and predicted</span>
+<span id="L28"><span class="lineNum">      28</span>              :    * rowbeg+1*rlen..rowbeg+1*rlen+rlen-1: sample data of the 1st row</span>
+<span id="L29"><span class="lineNum">      29</span>              :    * rowbeg+2*rlen..rowbeg+2*rlen+rlen-1: sample data of the 1st row</span>
+<span id="L30"><span class="lineNum">      30</span>              :    * ...</span>
+<span id="L31"><span class="lineNum">      31</span>              :    * rowbeg+(h-1)*rlen..rowbeg+h*rlen-1: sample data of the last row</span>
+<span id="L32"><span class="lineNum">      32</span>              :    * trail..beg+len: trailer, ignored. Its length must be &gt;=bpc.</span>
+<span id="L33"><span class="lineNum">      33</span>              :    * TODO: Remove trail, and see what breaks (e.g. setBpc).</span>
+<span id="L34"><span class="lineNum">      34</span>              :    */</span>
+<span id="L35"><span class="lineNum">      35</span>              :   class Sampled: public SimBuffer::Flat {</span>
+<span id="L36"><span class="lineNum">      36</span>              :    public:</span>
+<span id="L37"><span class="lineNum">      37</span>              :     /** Can hold 1 component of a sample of a single pixel. */</span>
+<span id="L38"><span class="lineNum">      38</span>              :     typedef unsigned char sample_t;</span>
+<span id="L39"><span class="lineNum">      39</span>              :     /** Can hold a height or depth of the image */</span>
+<span id="L40"><span class="lineNum">      40</span>              :     typedef unsigned int dimen_t;</span>
+<span id="L41"><span class="lineNum">      41</span>              :     /** Can hold a row length (in byte), which isn't greater than 3*(image width). */</span>
+<span id="L42"><span class="lineNum">      42</span>              :     typedef unsigned int rlen_t;</span>
+<span id="L43"><span class="lineNum">      43</span>              :     /** RGB = (red&lt;&lt;16)+(green&lt;&lt;8)+(blue). red, green and blue are 0..255 */</span>
+<span id="L44"><span class="lineNum">      44</span>              :     #if SIZEOF_LONG&gt;4 &amp;&amp; SIZEOF_INT&gt;=4</span>
+<span id="L45"><span class="lineNum">      45</span>              :       typedef unsigned int rgb_t;</span>
+<span id="L46"><span class="lineNum">      46</span>              :     #else</span>
+<span id="L47"><span class="lineNum">      47</span>              :       typedef unsigned long rgb_t;</span>
+<span id="L48"><span class="lineNum">      48</span>              :     #endif</span>
+<span id="L49"><span class="lineNum">      49</span>              :     BEGIN_STATIC_ENUM1(unsigned char)</span>
+<span id="L50"><span class="lineNum">      50</span>              :       TY_INDEXED=1, TY_GRAY=2, TY_RGB=3, TY_OTHER=4, TY_BLACKBOX=5</span>
+<span id="L51"><span class="lineNum">      51</span>              :     END_STATIC_ENUM()</span>
+<span id="L52"><span class="lineNum">      52</span>              :     BEGIN_STATIC_ENUM1(unsigned char) // static const unsigned char</span>
+<span id="L53"><span class="lineNum">      53</span>              :         CS_UNKNOWN=0,           /* error/unspecified */</span>
+<span id="L54"><span class="lineNum">      54</span>              :         CS_GRAYSCALE=1,         /* monochrome */</span>
+<span id="L55"><span class="lineNum">      55</span>              :         CS_RGB=2,               /* red/green/blue */</span>
+<span id="L56"><span class="lineNum">      56</span>              :         CS_YCbCr=3,             /* Y/Cb/Cr (also known as YUV) */</span>
+<span id="L57"><span class="lineNum">      57</span>              :         CS_CMYK=4,              /* C/M/Y/K */</span>
+<span id="L58"><span class="lineNum">      58</span>              :         CS_YCCK=5,              /* Y/Cb/Cr/K */</span>
+<span id="L59"><span class="lineNum">      59</span>              :         CS_Indexed_RGB=12</span>
+<span id="L60"><span class="lineNum">      60</span>              :     END_STATIC_ENUM()</span>
+<span id="L61"><span class="lineNum">      61</span>              :     static const unsigned char cs2cpp[6];</span>
+<span id="L62"><span class="lineNum">      62</span>              :     /** @return NULLP on error */</span>
+<span id="L63"><span class="lineNum">      63</span>              :     static char const *cs2devcs(unsigned char cs);</span>
+<span id="L64"><span class="lineNum">      64</span>              :    protected:</span>
+<span id="L65"><span class="lineNum">      65</span>              :     char *headp;</span>
+<span id="L66"><span class="lineNum">      66</span>              :     char *rowbeg;</span>
+<span id="L67"><span class="lineNum">      67</span>              :     char *trail;</span>
+<span id="L68"><span class="lineNum">      68</span>              :     /** Extra offset */</span>
+<span id="L69"><span class="lineNum">      69</span>              :     slen_t xoffs;</span>
+<span id="L70"><span class="lineNum">      70</span>              : </span>
+<span id="L71"><span class="lineNum">      71</span>              :     /** Length of one row, in bytes. Each row must begin on a byte boundary, so</span>
+<span id="L72"><span class="lineNum">      72</span>              :      * extra bits are appended after the rightmost pixel. These bits are</span>
+<span id="L73"><span class="lineNum">      73</span>              :      * arbitrary, and are ignored by the PostScript interpreter.</span>
+<span id="L74"><span class="lineNum">      74</span>              :      */</span>
+<span id="L75"><span class="lineNum">      75</span>              :     rlen_t rlen;</span>
+<span id="L76"><span class="lineNum">      76</span>              :     /** Image height, in pixels. */</span>
+<span id="L77"><span class="lineNum">      77</span>              :     dimen_t ht;</span>
+<span id="L78"><span class="lineNum">      78</span>              :     /** Image width, in pixels. */</span>
+<span id="L79"><span class="lineNum">      79</span>              :     dimen_t wd;</span>
+<span id="L80"><span class="lineNum">      80</span>              :     /** Color space. */</span>
+<span id="L81"><span class="lineNum">      81</span>              :     unsigned char cs;</span>
+<span id="L82"><span class="lineNum">      82</span>              :     /** Components per pixel. (number of planes, image depth). 1 for indexed,</span>
+<span id="L83"><span class="lineNum">      83</span>              :      * 1 for gray, 3 for RGB</span>
+<span id="L84"><span class="lineNum">      84</span>              :      */</span>
+<span id="L85"><span class="lineNum">      85</span>              :     unsigned char cpp;</span>
+<span id="L86"><span class="lineNum">      86</span>              :     /** BitsPerComponent: 1, 2, 4 or 8. PostScript allows 12 too. */</span>
+<span id="L87"><span class="lineNum">      87</span>              :     unsigned char bpc;</span>
+<span id="L88"><span class="lineNum">      88</span>              :     /** Transparent color value. Imp: ... */</span>
+<span id="L89"><span class="lineNum">      89</span>              :     rgb_t transpc;</span>
+<span id="L90"><span class="lineNum">      90</span>              :     /** Image type, TY_... */</span>
+<span id="L91"><span class="lineNum">      91</span>              :     unsigned char ty;</span>
+<span id="L92"><span class="lineNum">      92</span>              :     /** Initializes various fields, allocates memory. Called from descendants'</span>
+<span id="L93"><span class="lineNum">      93</span>              :      * constructors.</span>
+<span id="L94"><span class="lineNum">      94</span>              :      */</span>
+<span id="L95"><span class="lineNum">      95</span>              :     void init(slen_t l_comment, slen_t l_header, dimen_t wd_, dimen_t ht_,</span>
+<span id="L96"><span class="lineNum">      96</span>              :       unsigned char bpc_, unsigned char ty_, unsigned char cpp_);</span>
+<span id="L97"><span class="lineNum">      97</span>              :     /** Convert samples, make bpc=8, multiplication. */</span>
+<span id="L98"><span class="lineNum">      98</span>              :     void to8mul();</span>
+<span id="L99"><span class="lineNum">      99</span>              :     /** Convert samples, make bpc=8, no multiplication. */</span>
+<span id="L100"><span class="lineNum">     100</span>              :     void to8nomul();</span>
+<span id="L101"><span class="lineNum">     101</span>              :     /** Calls copyRGBRow.</span>
+<span id="L102"><span class="lineNum">     102</span>              :      * @return an Image::Indexed version of (this) iff the number of</span>
+<span id="L103"><span class="lineNum">     103</span>              :      *         colors&lt;=256. Otherwise, returns NULLP.</span>
+<span id="L104"><span class="lineNum">     104</span>              :      */</span>
+<span id="L105"><span class="lineNum">     105</span>              :     Indexed* toIndexed0()/* const*/;</span>
+<span id="L106"><span class="lineNum">     106</span>              :     /** No averaging is done, only the red component is extracted */</span>
+<span id="L107"><span class="lineNum">     107</span>              :     Gray* toGray0(unsigned char bpc_);</span>
+<span id="L108"><span class="lineNum">     108</span>              :     RGB * toRGB0(unsigned char bpc_);</span>
+<span id="L109"><span class="lineNum">     109</span>              :     /** @return if any pixels are not gray: false. otherwise: true or false. */</span>
+<span id="L110"><span class="lineNum">     110</span>              :    public:</span>
+<span id="L111"><span class="lineNum">     111</span> <span class="tlaGNC tlaBgGNC">          12 :     inline bool hasTransp() const { return transpc!=0x1000000UL; }</span></span>
+<span id="L112"><span class="lineNum">     112</span>              :     virtual bool canGray() const =0;</span>
+<span id="L113"><span class="lineNum">     113</span>              :     /** @return an RGB BitsPerComponent number (1,2,4 or 8) to which the image</span>
+<span id="L114"><span class="lineNum">     114</span>              :      * could be converted without any loss. The default implementation calls</span>
+<span id="L115"><span class="lineNum">     115</span>              :      * copyRGBRow().</span>
+<span id="L116"><span class="lineNum">     116</span>              :      */</span>
+<span id="L117"><span class="lineNum">     117</span>              :     virtual unsigned char minRGBBpc() const;</span>
+<span id="L118"><span class="lineNum">     118</span> <span class="tlaGNC">          37 :     inline virtual ~Sampled() { delete [] const_cast&lt;char*&gt;(beg); }</span></span>
+<span id="L119"><span class="lineNum">     119</span>              :     /** Copies whichrow as wd*3 bytes (R0,G0,B0,R1,G1,B1...) to `to' */</span>
+<span id="L120"><span class="lineNum">     120</span>              :     virtual void copyRGBRow(char *to, dimen_t whichrow) const =0;</span>
+<span id="L121"><span class="lineNum">     121</span>              :     virtual bool hasPixelRGB(Image::Sampled::rgb_t rgb) const;</span>
+<span id="L122"><span class="lineNum">     122</span> <span class="tlaGNC">          63 :     inline char *getRowbeg() const { return rowbeg; }</span></span>
+<span id="L123"><span class="lineNum">     123</span> <span class="tlaGNC">          92 :     inline dimen_t getWd() const { return wd; }</span></span>
+<span id="L124"><span class="lineNum">     124</span> <span class="tlaGNC">          83 :     inline dimen_t getHt() const { return ht; }</span></span>
+<span id="L125"><span class="lineNum">     125</span> <span class="tlaGNC">          35 :     inline unsigned char getTy() const { return ty; }</span></span>
+<span id="L126"><span class="lineNum">     126</span> <span class="tlaGNC">          31 :     inline unsigned char getBpc() const { return bpc; }</span></span>
+<span id="L127"><span class="lineNum">     127</span> <span class="tlaGNC">          43 :     inline unsigned char getCpp() const { return cpp; }</span></span>
+<span id="L128"><span class="lineNum">     128</span> <span class="tlaGNC">           4 :     inline unsigned char getCs() const { return cs; }</span></span>
+<span id="L129"><span class="lineNum">     129</span> <span class="tlaGNC">           4 :     inline slen_t getXoffs() const { return xoffs; }</span></span>
+<span id="L130"><span class="lineNum">     130</span> <span class="tlaGNC">          12 :     inline rlen_t getRlen() const { return rlen; }</span></span>
+<span id="L131"><span class="lineNum">     131</span> <span class="tlaUNC tlaBgUNC">           0 :     inline rgb_t getTranspc() const { return transpc; }</span></span>
+<span id="L132"><span class="lineNum">     132</span> <span class="tlaGNC tlaBgGNC">          52 :     inline char *getHeadp() const { return headp; }</span></span>
+<span id="L133"><span class="lineNum">     133</span>              :     /** Convert samples, make bpc=8. */</span>
+<span id="L134"><span class="lineNum">     134</span>              :     virtual void to8() =0;</span>
+<span id="L135"><span class="lineNum">     135</span>              :     /** @return NULLP if too many colors for indexed; otherwise a new Image::Indexed.</span>
+<span id="L136"><span class="lineNum">     136</span>              :      * The caller should `delete' (this) if toIndexed()==NULLP.</span>
+<span id="L137"><span class="lineNum">     137</span>              :      */</span>
+<span id="L138"><span class="lineNum">     138</span>              :     virtual /*Image::*/Indexed* toIndexed() =0;</span>
+<span id="L139"><span class="lineNum">     139</span>              :     virtual /*Image::*/RGB*  toRGB(unsigned char bpc_) =0;</span>
+<span id="L140"><span class="lineNum">     140</span>              :     virtual /*Image::*/Gray* toGray(unsigned char bpc_) =0;</span>
+<span id="L141"><span class="lineNum">     141</span>              :     // virtual void setBpc(unsigned char bpc_) =0;</span>
+<span id="L142"><span class="lineNum">     142</span>              :     friend GenBuffer::Writable&amp; operator&lt;&lt;(GenBuffer::Writable&amp;, /*Image::*/Sampled const&amp;);</span>
+<span id="L143"><span class="lineNum">     143</span>              :     /** @return address of static buffer: &quot;#RRGGBB&quot; */</span>
+<span id="L144"><span class="lineNum">     144</span>              :     static char *rgb2webhash(rgb_t);</span>
+<span id="L145"><span class="lineNum">     145</span>              :     /** @return (this) or an image containing (this) composed with alpha</span>
+<span id="L146"><span class="lineNum">     146</span>              :      * channel `al'</span>
+<span id="L147"><span class="lineNum">     147</span>              :      */</span>
+<span id="L148"><span class="lineNum">     148</span>              :     virtual Sampled* addAlpha(/*Image::*/Gray *al) =0;</span>
+<span id="L149"><span class="lineNum">     149</span>              :     /** assert(al.bpp=8) etc. Imp: document this */</span>
+<span id="L150"><span class="lineNum">     150</span>              :     static Indexed* addAlpha0(Indexed *iimg, Gray *al);</span>
+<span id="L151"><span class="lineNum">     151</span>              :   };</span>
+<span id="L152"><span class="lineNum">     152</span>              : </span>
+<span id="L153"><span class="lineNum">     153</span>              :   class Indexed: public Sampled {</span>
+<span id="L154"><span class="lineNum">     154</span>              :    public:</span>
+<span id="L155"><span class="lineNum">     155</span>              :     /** @param ncols_ must be &gt;= the colors used */</span>
+<span id="L156"><span class="lineNum">     156</span>              :     Indexed(dimen_t wd_, dimen_t ht_, unsigned short ncols_, unsigned char bpc_);</span>
+<span id="L157"><span class="lineNum">     157</span>              :     /** This includes the transparent color as well. */</span>
+<span id="L158"><span class="lineNum">     158</span> <span class="tlaGNC">          43 :     inline unsigned short getNcols() const { return (rowbeg-headp)/3; }</span></span>
+<span id="L159"><span class="lineNum">     159</span>              :     /** Destroys the color table, and creates one with ncols_ colors.</span>
+<span id="L160"><span class="lineNum">     160</span>              :      * @param ncols_ must be &lt;= the ncols_ specified in the constructor</span>
+<span id="L161"><span class="lineNum">     161</span>              :      */</span>
+<span id="L162"><span class="lineNum">     162</span>              :     void setNcols(unsigned short ncols_);</span>
+<span id="L163"><span class="lineNum">     163</span>              :     /** Decreases the size of the palette (forgets last colors) to the</span>
+<span id="L164"><span class="lineNum">     164</span>              :      * specified amount.</span>
+<span id="L165"><span class="lineNum">     165</span>              :      */</span>
+<span id="L166"><span class="lineNum">     166</span>              :     void setNcolsMove(unsigned short ncols_);</span>
+<span id="L167"><span class="lineNum">     167</span>              :     void setPal(unsigned char coloridx, rgb_t rgb);</span>
+<span id="L168"><span class="lineNum">     168</span>              :     rgb_t getPal(unsigned char coloridx) const;</span>
+<span id="L169"><span class="lineNum">     169</span>              :     /** @param coloridx must be &gt;=0, transp must be -1 */</span>
+<span id="L170"><span class="lineNum">     170</span>              :     void setTransp(unsigned char coloridx);</span>
+<span id="L171"><span class="lineNum">     171</span>              :     /** @return new hasTransp */</span>
+<span id="L172"><span class="lineNum">     172</span>              :     bool setTranspc(rgb_t color);</span>
+<span id="L173"><span class="lineNum">     173</span>              :     /** Returns like setTranspc, but doesn't change the image.</span>
+<span id="L174"><span class="lineNum">     174</span>              :      * @return new hasTransp</span>
+<span id="L175"><span class="lineNum">     175</span>              :      */</span>
+<span id="L176"><span class="lineNum">     176</span>              :     bool wouldSetTranspc(rgb_t color) const;</span>
+<span id="L177"><span class="lineNum">     177</span>              :     /** Like setTranspc, but if it makes any changes, then it calls</span>
+<span id="L178"><span class="lineNum">     178</span>              :      * packPal() and changes back bpc to its old value.</span>
+<span id="L179"><span class="lineNum">     179</span>              :      */</span>
+<span id="L180"><span class="lineNum">     180</span>              :     void setTranspcAndRepack(rgb_t color);</span>
+<span id="L181"><span class="lineNum">     181</span>              :     virtual void copyRGBRow(char *to, dimen_t whichrow) const;</span>
+<span id="L182"><span class="lineNum">     182</span>              :     /* virtual bool hasPixelRGB(Image::Sampled::rgb_t rgb) const; */</span>
+<span id="L183"><span class="lineNum">     183</span>              :     /** Packs (compresses) the palette so that it will be continuous in</span>
+<span id="L184"><span class="lineNum">     184</span>              :      * 0..ncols-1, and each color will be used exactly once. The</span>
+<span id="L185"><span class="lineNum">     185</span>              :      * transparent color (if present) will become black. As a side-effect,</span>
+<span id="L186"><span class="lineNum">     186</span>              :      * packPal() may set (this)-&gt;bpc=8.</span>
+<span id="L187"><span class="lineNum">     187</span>              :      */</span>
+<span id="L188"><span class="lineNum">     188</span>              :     void packPal();</span>
+<span id="L189"><span class="lineNum">     189</span>              :     virtual void to8();</span>
+<span id="L190"><span class="lineNum">     190</span>              :     virtual /*Image::*/Indexed* toIndexed();</span>
+<span id="L191"><span class="lineNum">     191</span>              :     virtual /*Image::*/RGB*  toRGB(unsigned char bpc_);</span>
+<span id="L192"><span class="lineNum">     192</span>              :     virtual /*Image::*/Gray* toGray(unsigned char bpc_);</span>
+<span id="L193"><span class="lineNum">     193</span>              :     virtual bool canGray() const;</span>
+<span id="L194"><span class="lineNum">     194</span> <span class="tlaUNC tlaBgUNC">           0 :     inline signed short getTransp() const { return transp; }</span></span>
+<span id="L195"><span class="lineNum">     195</span> <span class="tlaUNC">           0 :     inline signed short getClearTransp() { signed short ret=transp; transp=-1; return ret; }</span></span>
+<span id="L196"><span class="lineNum">     196</span>              :     /** if (transp&gt;0) transp=0;, converts image data. Does not change bpc. */</span>
+<span id="L197"><span class="lineNum">     197</span>              :     void makeTranspZero();</span>
+<span id="L198"><span class="lineNum">     198</span>              :     virtual unsigned char minRGBBpc() const;</span>
+<span id="L199"><span class="lineNum">     199</span>              :     /** Separates the current image into Indexed1 images. The caller is</span>
+<span id="L200"><span class="lineNum">     200</span>              :      * recommended to call packPal() first to reduce the number of required</span>
+<span id="L201"><span class="lineNum">     201</span>              :      * images.</span>
+<span id="L202"><span class="lineNum">     202</span>              :      * As a side-effect,</span>
+<span id="L203"><span class="lineNum">     203</span>              :      * separate() may set (this)-&gt;bpc=8. </span>
+<span id="L204"><span class="lineNum">     204</span>              :      * @return the array of images after full color separation: that is</span>
+<span id="L205"><span class="lineNum">     205</span>              :      *   a dynamically allocated array of `getNcols()-(getTransp()!=-1)'</span>
+<span id="L206"><span class="lineNum">     206</span>              :      *   Indexed images: each image is Indexed1, color 0 is opaque (with the</span>
+<span id="L207"><span class="lineNum">     207</span>              :      *   color obtained from (this)), color 1 is transparent. The returned</span>
+<span id="L208"><span class="lineNum">     208</span>              :      *   array is NULLP-terminated.</span>
+<span id="L209"><span class="lineNum">     209</span>              :      */</span>
+<span id="L210"><span class="lineNum">     210</span>              :     Indexed **separate();</span>
+<span id="L211"><span class="lineNum">     211</span>              :     /** Also calls packPal(). As a side effect, changes all transparent</span>
+<span id="L212"><span class="lineNum">     212</span>              :      * pixels to color index 0.</span>
+<span id="L213"><span class="lineNum">     213</span>              :      * @return NULLP if no transparent pixels.</span>
+<span id="L214"><span class="lineNum">     214</span>              :      */</span>
+<span id="L215"><span class="lineNum">     215</span>              :     Indexed *calcAlpha();</span>
+<span id="L216"><span class="lineNum">     216</span>              :     /** Deletes all elements of p, but not p itself.</span>
+<span id="L217"><span class="lineNum">     217</span>              :      * @param p a NULLP-terminated list of (Indexed*)s.</span>
+<span id="L218"><span class="lineNum">     218</span>              :      */</span>
+<span id="L219"><span class="lineNum">     219</span>              :     static void delete_separated(Indexed **p);</span>
+<span id="L220"><span class="lineNum">     220</span>              :     /** Reorganizes the image so it will have the specified bpc. Issues a</span>
+<span id="L221"><span class="lineNum">     221</span>              :      * runtime error if the specified bpc cannot be achieved.</span>
+<span id="L222"><span class="lineNum">     222</span>              :      * @param bpc_ the desired bpc, or 0: the best achievable.</span>
+<span id="L223"><span class="lineNum">     223</span>              :      */</span>
+<span id="L224"><span class="lineNum">     224</span>              :     virtual void setBpc(unsigned char bpc_);</span>
+<span id="L225"><span class="lineNum">     225</span>              :     void dumpDebug(GenBuffer::Writable&amp; gw);</span>
+<span id="L226"><span class="lineNum">     226</span>              :    protected:</span>
+<span id="L227"><span class="lineNum">     227</span>              :     /* Index of the transparent color, or -1. */</span>
+<span id="L228"><span class="lineNum">     228</span>              :     signed short transp;</span>
+<span id="L229"><span class="lineNum">     229</span>              :     virtual /*Image::*/Sampled* addAlpha(/*Image::*/Gray *al);</span>
+<span id="L230"><span class="lineNum">     230</span>              :     /** Sorts the palette colors in lexicographic, stable order.</span>
+<span id="L231"><span class="lineNum">     231</span>              :      * Called from packPal() to get a consistent palette.</span>
+<span id="L232"><span class="lineNum">     232</span>              :      */</span>
+<span id="L233"><span class="lineNum">     233</span>              :     void sortPal();</span>
+<span id="L234"><span class="lineNum">     234</span>              :   };</span>
+<span id="L235"><span class="lineNum">     235</span>              :   class Gray: public Sampled {</span>
+<span id="L236"><span class="lineNum">     236</span>              :    public:</span>
+<span id="L237"><span class="lineNum">     237</span>              :     Gray(dimen_t wd_, dimen_t ht_, unsigned char bpc_);</span>
+<span id="L238"><span class="lineNum">     238</span>              :     virtual void copyRGBRow(char *to, dimen_t whichrow) const;</span>
+<span id="L239"><span class="lineNum">     239</span>              :     virtual bool hasPixelRGB(Image::Sampled::rgb_t rgb) const;</span>
+<span id="L240"><span class="lineNum">     240</span>              :     virtual void to8();</span>
+<span id="L241"><span class="lineNum">     241</span>              :     virtual /*Image::*/Indexed* toIndexed();</span>
+<span id="L242"><span class="lineNum">     242</span>              :     virtual bool canGray() const;</span>
+<span id="L243"><span class="lineNum">     243</span>              :     // virtual void setBpc(unsigned char bpc_);</span>
+<span id="L244"><span class="lineNum">     244</span>              :     virtual /*Image::*/RGB    * toRGB(unsigned char bpc_);</span>
+<span id="L245"><span class="lineNum">     245</span>              :     virtual /*Image::*/Gray   * toGray(unsigned char bpc_);</span>
+<span id="L246"><span class="lineNum">     246</span>              :     virtual /*Image::*/Sampled* addAlpha(/*Image::*/Gray *al);</span>
+<span id="L247"><span class="lineNum">     247</span>              :     /** Calls to8(). */</span>
+<span id="L248"><span class="lineNum">     248</span>              :     void calcExtrema(unsigned char &amp;lightest, unsigned char &amp;darkest);</span>
+<span id="L249"><span class="lineNum">     249</span>              :   };</span>
+<span id="L250"><span class="lineNum">     250</span>              :   class RGB: public Sampled {</span>
+<span id="L251"><span class="lineNum">     251</span>              :    public:</span>
+<span id="L252"><span class="lineNum">     252</span>              :     RGB(dimen_t wd_, dimen_t ht_, unsigned char bpc_);</span>
+<span id="L253"><span class="lineNum">     253</span>              :     virtual void copyRGBRow(char *to, dimen_t whichrow) const;</span>
+<span id="L254"><span class="lineNum">     254</span>              :     /* virtual bool hasPixelRGB(Image::Sampled::rgb_t rgb) const; */</span>
+<span id="L255"><span class="lineNum">     255</span>              :     virtual void to8();</span>
+<span id="L256"><span class="lineNum">     256</span>              :     virtual /*Image::*/Indexed* toIndexed();</span>
+<span id="L257"><span class="lineNum">     257</span>              :     virtual bool canGray() const;</span>
+<span id="L258"><span class="lineNum">     258</span>              :     // virtual void setBpc(unsigned char bpc_);</span>
+<span id="L259"><span class="lineNum">     259</span>              :     virtual /*Image::*/RGB    * toRGB(unsigned char bpc_);</span>
+<span id="L260"><span class="lineNum">     260</span>              :     virtual /*Image::*/Gray   * toGray(unsigned char bpc_);</span>
+<span id="L261"><span class="lineNum">     261</span>              :     virtual /*Image::*/Sampled* addAlpha(/*Image::*/Gray *al);</span>
+<span id="L262"><span class="lineNum">     262</span>              :   };</span>
+<span id="L263"><span class="lineNum">     263</span>              :   </span>
+<span id="L264"><span class="lineNum">     264</span>              :   /** Avoid including &lt;stdio.h&gt; */</span>
+<span id="L265"><span class="lineNum">     265</span>              :   typedef void *filep_t;</span>
+<span id="L266"><span class="lineNum">     266</span>              :   </span>
+<span id="L267"><span class="lineNum">     267</span>              :   /** Describes a driver that can load a specific image file format. */</span>
+<span id="L268"><span class="lineNum">     268</span>              :   struct Loader {</span>
+<span id="L269"><span class="lineNum">     269</span>              :     /** Filter::UngetFILED */</span>
+<span id="L270"><span class="lineNum">     270</span>              :     class UFD;</span>
+<span id="L271"><span class="lineNum">     271</span>              :     /** A function that can (allocate and) load a sampled image. Never</span>
+<span id="L272"><span class="lineNum">     272</span>              :      * returns NULL. On error, it calls Error::.... The filep_t argument</span>
+<span id="L273"><span class="lineNum">     273</span>              :      * should be really cast back to FILE*. The reader must fclose the FILE*.</span>
+<span id="L274"><span class="lineNum">     274</span>              :      */</span>
+<span id="L275"><span class="lineNum">     275</span>              :     // typedef Sampled*(*reader_t)(filep_t, SimBuffer::Flat const&amp; loadHints);</span>
+<span id="L276"><span class="lineNum">     276</span>              :     typedef Sampled*(*reader_t)(UFD* ufd, SimBuffer::Flat const&amp; loadHints);</span>
+<span id="L277"><span class="lineNum">     277</span>              :     BEGIN_STATIC_ENUM1(unsigned) MAGIC_LEN=64 END_STATIC_ENUM()</span>
+<span id="L278"><span class="lineNum">     278</span>              :     /** A function that checks the magic numbers at the beginning of a file</span>
+<span id="L279"><span class="lineNum">     279</span>              :      * (already read into buf), and returns NULL if it cannot load an image</span>
+<span id="L280"><span class="lineNum">     280</span>              :      * of that type, or a reader_t that will load the image. If (and only if!)</span>
+<span id="L281"><span class="lineNum">     281</span>              :      * file is shorter than 64 bytes, the buf is padded with '\000' bytes.</span>
+<span id="L282"><span class="lineNum">     282</span>              :      * @param f may read from freely if necessary (MAGIC_LEN is short), but</span>
+<span id="L283"><span class="lineNum">     283</span>              :      *   has to call rewind(f) before reading</span>
+<span id="L284"><span class="lineNum">     284</span>              :      */</span>
+<span id="L285"><span class="lineNum">     285</span>              :     typedef reader_t(*checker_t)(char buf[MAGIC_LEN], char bufend[MAGIC_LEN], SimBuffer::Flat const&amp; loadHints, UFD* ufd);</span>
+<span id="L286"><span class="lineNum">     286</span>              :     /** A null-terminated, compact string describing (not defining!) the image</span>
+<span id="L287"><span class="lineNum">     287</span>              :      * file format.</span>
+<span id="L288"><span class="lineNum">     288</span>              :      * Examples: &quot;GIF&quot;, &quot;XPM&quot;, &quot;PNM&quot;</span>
+<span id="L289"><span class="lineNum">     289</span>              :      */</span>
+<span id="L290"><span class="lineNum">     290</span>              :     char const*format;</span>
+<span id="L291"><span class="lineNum">     291</span>              :     checker_t checker;</span>
+<span id="L292"><span class="lineNum">     292</span>              :     /** Null or next loader. */</span>
+<span id="L293"><span class="lineNum">     293</span>              :     Loader *next;</span>
+<span id="L294"><span class="lineNum">     294</span>              :   };</span>
+<span id="L295"><span class="lineNum">     295</span>              :   </span>
+<span id="L296"><span class="lineNum">     296</span>              :   /** Registers a new type of image Loader, i.e a new image file format. The</span>
+<span id="L297"><span class="lineNum">     297</span>              :    * new image format will be put in front of all others, and will be checked</span>
+<span id="L298"><span class="lineNum">     298</span>              :    * first</span>
+<span id="L299"><span class="lineNum">     299</span>              :    */</span>
+<span id="L300"><span class="lineNum">     300</span>              :   static void register0(Loader *);</span>
+<span id="L301"><span class="lineNum">     301</span>              :   /** Loads the image contained in te file `filename'.</span>
+<span id="L302"><span class="lineNum">     302</span>              :    * @param format NULLP is unknown (load any format)</span>
+<span id="L303"><span class="lineNum">     303</span>              :    *   or an Image::Loader::format already registered</span>
+<span id="L304"><span class="lineNum">     304</span>              :    */</span>
+<span id="L305"><span class="lineNum">     305</span>              :   static Sampled* load(Loader::UFD* ufd, SimBuffer::Flat const&amp; loadHints, char const* format);</span>
+<span id="L306"><span class="lineNum">     306</span>              :   static Sampled* load(char const *filename, SimBuffer::Flat const&amp; loadHints, filep_t stdin_f=(filep_t*)NULLP, char const* format=(char const*)NULLP);</span>
+<span id="L307"><span class="lineNum">     307</span>              :   /* Prints the list of available Loaders (-&gt;format), separated by spaces.</span>
+<span id="L308"><span class="lineNum">     308</span>              :    * Returns the number of available Loaders. Prepends a space if &gt;= loaders.</span>
+<span id="L309"><span class="lineNum">     309</span>              :    */</span>
+<span id="L310"><span class="lineNum">     310</span>              :   static unsigned printLoaders(GenBuffer::Writable &amp;);</span>
+<span id="L311"><span class="lineNum">     311</span>              : </span>
+<span id="L312"><span class="lineNum">     312</span>              :   /** SampleFormat constants */</span>
+<span id="L313"><span class="lineNum">     313</span>              :   BEGIN_STATIC_ENUM(unsigned, sf_t)</span>
+<span id="L314"><span class="lineNum">     314</span>              :     SF_None=0, /* no specific sample format */</span>
+<span id="L315"><span class="lineNum">     315</span>              :     SF_Opaque=1,</span>
+<span id="L316"><span class="lineNum">     316</span>              :     SF_Transparent=2,</span>
+<span id="L317"><span class="lineNum">     317</span>              :     SF_Gray1=3,</span>
+<span id="L318"><span class="lineNum">     318</span>              :     SF_Indexed1=4,</span>
+<span id="L319"><span class="lineNum">     319</span>              :     SF_Mask=5,</span>
+<span id="L320"><span class="lineNum">     320</span>              :     SF_Transparent2=6,</span>
+<span id="L321"><span class="lineNum">     321</span>              :     SF_Gray2=7,</span>
+<span id="L322"><span class="lineNum">     322</span>              :     SF_Indexed2=8,</span>
+<span id="L323"><span class="lineNum">     323</span>              :     SF_Transparent4=9,</span>
+<span id="L324"><span class="lineNum">     324</span>              :     SF_Rgb1=10,</span>
+<span id="L325"><span class="lineNum">     325</span>              :     SF_Gray4=11,</span>
+<span id="L326"><span class="lineNum">     326</span>              :     SF_Indexed4=12,</span>
+<span id="L327"><span class="lineNum">     327</span>              :     SF_Transparent8=13,</span>
+<span id="L328"><span class="lineNum">     328</span>              :     SF_Rgb2=14,</span>
+<span id="L329"><span class="lineNum">     329</span>              :     SF_Gray8=15,</span>
+<span id="L330"><span class="lineNum">     330</span>              :     SF_Indexed8=16,</span>
+<span id="L331"><span class="lineNum">     331</span>              :     SF_Rgb4=17,</span>
+<span id="L332"><span class="lineNum">     332</span>              :     SF_Rgb8=18,</span>
+<span id="L333"><span class="lineNum">     333</span>              :     SF_Asis=19,</span>
+<span id="L334"><span class="lineNum">     334</span>              :     SF_Bbox=20,</span>
+<span id="L335"><span class="lineNum">     335</span>              :     SF_max=31</span>
+<span id="L336"><span class="lineNum">     336</span>              :   END_STATIC_ENUM()</span>
+<span id="L337"><span class="lineNum">     337</span>              : </span>
+<span id="L338"><span class="lineNum">     338</span>              :   /** Contains (and memory-manages) an image, and optimization information</span>
+<span id="L339"><span class="lineNum">     339</span>              :    * as a cache.</span>
+<span id="L340"><span class="lineNum">     340</span>              :    *</span>
+<span id="L341"><span class="lineNum">     341</span>              :    * A SampledInfo contains an image in a canonical format. That is, if two</span>
+<span id="L342"><span class="lineNum">     342</span>              :    * images have the same RGB8 (identical width, height and pixels) or</span>
+<span id="L343"><span class="lineNum">     343</span>              :    * blackbox (identical bytes) representation, and SampledInfo{} are</span>
+<span id="L344"><span class="lineNum">     344</span>              :    * created for both of them, it is guaranteed that the two SampledInfo{}s</span>
+<span id="L345"><span class="lineNum">     345</span>              :    * contain the same image data (width, height, canGray, minRGBBpc,</span>
+<span id="L346"><span class="lineNum">     346</span>              :    * SampleFormat (except for bpc), pixel data, palette (same size, colors</span>
+<span id="L347"><span class="lineNum">     347</span>              :    * and color order)).</span>
+<span id="L348"><span class="lineNum">     348</span>              :    */</span>
+<span id="L349"><span class="lineNum">     349</span>              :   class SampledInfo {</span>
+<span id="L350"><span class="lineNum">     350</span>              :    public:</span>
+<span id="L351"><span class="lineNum">     351</span>              :     /** This constructor call takes ownership of the `img_' pointer: it either</span>
+<span id="L352"><span class="lineNum">     352</span>              :      * reuses the original image (and will delete it in ~SampledInfo), or it</span>
+<span id="L353"><span class="lineNum">     353</span>              :      * immediately deletes the image, and uses another image.</span>
+<span id="L354"><span class="lineNum">     354</span>              :      */</span>
+<span id="L355"><span class="lineNum">     355</span>              :     SampledInfo(Sampled *img_);</span>
+<span id="L356"><span class="lineNum">     356</span>              :     ~SampledInfo();</span>
+<span id="L357"><span class="lineNum">     357</span> <span class="tlaUNC">           0 :     inline Sampled* getImage() const { return img; }</span></span>
+<span id="L358"><span class="lineNum">     358</span>              :     /**</span>
+<span id="L359"><span class="lineNum">     359</span>              :      * Source image, may be modified even if TryOnly==false. If</span>
+<span id="L360"><span class="lineNum">     360</span>              :      * modified, the original will be freed.</span>
+<span id="L361"><span class="lineNum">     361</span>              :      * @param sf desired sample format, see Image::SF_* constants</span>
+<span id="L362"><span class="lineNum">     362</span>              :      * @param WarningOK if false: make the conversion fail if it would produces</span>
+<span id="L363"><span class="lineNum">     363</span>              :      *        a Warning</span>
+<span id="L364"><span class="lineNum">     364</span>              :      * @param TryOnly if true: don't do the real conversion (but may do auxilary,</span>
+<span id="L365"><span class="lineNum">     365</span>              :      *        idempontent, helper conversion), assume it has succeeded</span>
+<span id="L366"><span class="lineNum">     366</span>              :      * @param Transparent: as part of the conversion, try to make this RGB color</span>
+<span id="L367"><span class="lineNum">     367</span>              :      *        transparent</span>
+<span id="L368"><span class="lineNum">     368</span>              :      * @return true iff the conversion succeeded. Note that img may be the same</span>
+<span id="L369"><span class="lineNum">     369</span>              :      *         pointer even when true is returned. If false is returned, keeps</span>
+<span id="L370"><span class="lineNum">     370</span>              :      *         the image unchanged.</span>
+<span id="L371"><span class="lineNum">     371</span>              :      */</span>
+<span id="L372"><span class="lineNum">     372</span>              :     bool setSampleFormat(sf_t sf, bool WarningOK, bool TryOnly, Sampled::rgb_t Transparent);</span>
+<span id="L373"><span class="lineNum">     373</span> <span class="tlaGNC tlaBgGNC">           5 :     inline Indexed **getImgs() const { return imgs; }</span></span>
+<span id="L374"><span class="lineNum">     374</span> <span class="tlaGNC">          33 :     inline Sampled *getImg() const { return img; }</span></span>
+<span id="L375"><span class="lineNum">     375</span> <span class="tlaUNC tlaBgUNC">           0 :     inline unsigned getNncols() const { return nncols; }</span></span>
+<span id="L376"><span class="lineNum">     376</span>              :     void separate();</span>
+<span id="L377"><span class="lineNum">     377</span> <span class="tlaUNC">           0 :     inline bool canGrayy() const { return canGray; }</span></span>
+<span id="L378"><span class="lineNum">     378</span> <span class="tlaUNC">           0 :     inline unsigned char minRGBBpcc() const { return minRGBBpc; }</span></span>
+<span id="L379"><span class="lineNum">     379</span> <span class="tlaUNC">           0 :     inline bool hasTranspp() const { return hasTransp; }</span></span>
+<span id="L380"><span class="lineNum">     380</span> <span class="tlaUNC">           0 :     inline unsigned char minGrayBpcc() const { return canGray ? minRGBBpc : 0; }</span></span>
+<span id="L381"><span class="lineNum">     381</span> <span class="tlaUNC">           0 :     inline void clearTransp() { hasTransp=false; }</span></span>
+<span id="L382"><span class="lineNum">     382</span>              :    protected:</span>
+<span id="L383"><span class="lineNum">     383</span>              :     bool hasTransp;</span>
+<span id="L384"><span class="lineNum">     384</span>              :     /** Number of non-transparent colors, or 257 if &gt;=257. */</span>
+<span id="L385"><span class="lineNum">     385</span>              :     unsigned nncols;</span>
+<span id="L386"><span class="lineNum">     386</span>              :     /** Has only gray colors. */</span>
+<span id="L387"><span class="lineNum">     387</span>              :     bool canGray;</span>
+<span id="L388"><span class="lineNum">     388</span>              :     unsigned char minRGBBpc;</span>
+<span id="L389"><span class="lineNum">     389</span>              :     Sampled *img;</span>
+<span id="L390"><span class="lineNum">     390</span>              :     /** The array of images after full color separation. May be NULLP (default),</span>
+<span id="L391"><span class="lineNum">     391</span>              :      * or a dynamically allocated array of `nncols' Indexed images: each</span>
+<span id="L392"><span class="lineNum">     392</span>              :      * image is Indexed1, color 0 is opaque (with any value), color 1 </span>
+<span id="L393"><span class="lineNum">     393</span>              :      * is transparent.</span>
+<span id="L394"><span class="lineNum">     394</span>              :      */</span>
+<span id="L395"><span class="lineNum">     395</span>              :     Indexed **imgs;</span>
+<span id="L396"><span class="lineNum">     396</span>              :     sf_t sf;</span>
+<span id="L397"><span class="lineNum">     397</span>              :   };</span>
+<span id="L398"><span class="lineNum">     398</span>              : };</span>
+<span id="L399"><span class="lineNum">     399</span>              : </span>
+<span id="L400"><span class="lineNum">     400</span>              : /** Dumps this Image as a rawbits PPM file (plus a comment indicating transparency)</span>
+<span id="L401"><span class="lineNum">     401</span>              :  * @return the Writable.</span>
+<span id="L402"><span class="lineNum">     402</span>              :  */</span>
+<span id="L403"><span class="lineNum">     403</span>              : GenBuffer::Writable&amp; operator&lt;&lt;(GenBuffer::Writable&amp;, Image::Sampled const&amp;);</span>
+<span id="L404"><span class="lineNum">     404</span>              : </span>
+<span id="L405"><span class="lineNum">     405</span>              : #endif</span>
+        </pre>
+              </td>
+            </tr>
+          </table>
+          <br>
+
+          <table width="100%" border=0 cellspacing=0 cellpadding=0>
+            <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+            <tr><td class="versionInfo">Generated by: <a href="https://github.com//linux-test-project/lcov" target="_parent">LCOV version 2.0-1</a></td></tr>
+          </table>
+          <br>
+
+</body>
+</html>

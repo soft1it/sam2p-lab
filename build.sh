@@ -22,5 +22,17 @@ make ps_tiny CC=gcc CXX=g++ MY_CFLAGS=""
 make USE_ASAN=1 \
 CC=afl-clang-fast \
 CXX=afl-clang-fast++ \
-MY_CFLAGS="-fsanitize=address -g"
+MY_CFLAGS="-g"
 cp sam2p sam2p-instrumented
+
+echo "Coverage build"
+make clean
+make ps_tiny CC=gcc CXX=g++ MY_CFLAGS=""
+make MY_CFLAGS="-g -O0 --coverage" \
+    LDFLAGS="--coverage"
+cp sam2p sam2p-coverage
+
+
+echo ""
+echo "=== builds DONE ==="
+ls -la sam2p-*

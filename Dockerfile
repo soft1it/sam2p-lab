@@ -14,6 +14,12 @@ RUN apt-get update && apt-get install -y \
     libjpeg-dev \
     libtiff-dev \
     git \
+    perl \
+    lcov \
+    gcovr \    
+    netpbm \
+    libjapeg-progs \
+    imagemagick \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app

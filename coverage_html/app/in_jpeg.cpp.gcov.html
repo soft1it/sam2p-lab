@@ -1,0 +1,115 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - coverage.info - app/in_jpeg.cpp</title>
+  <link rel="stylesheet" type="text/css" href="../gcov.css">
+</head>
+
+<body>
+
+          <table width="100%" border=0 cellspacing=0 cellpadding=0>
+            <tr><td class="title">LCOV - code coverage report</td></tr>
+            <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+
+            <tr>
+              <td width="100%">
+                <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="10%" class="headerValue"><a href="../index.html">top level</a> - <a href="index.html">/app</a> - in_jpeg.cpp<span style="font-size: 80%;"> (source / <a href="in_jpeg.cpp.func-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="5%"></td>
+            <td width="5%" class="headerCovTableHead">Coverage</td>
+            <td width="5%" class="headerCovTableHead" title="Covered + Uncovered code">Total</td>
+            <td width="5%" class="headerCovTableHead" title="Exercised code only">Hit</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">coverage.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntryLo">22.2&nbsp;%</td>
+            <td class="headerCovTableEntry">9</td>
+            <td class="headerCovTableEntry">2</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test Date:</td>
+            <td class="headerValue">2026-06-26 13:21:55</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntryLo">50.0&nbsp;%</td>
+            <td class="headerCovTableEntry">2</td>
+            <td class="headerCovTableEntry">1</td>
+          </tr>
+                  <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+                </table>
+              </td>
+            </tr>
+
+            <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+          </table>
+
+          <table cellpadding=0 cellspacing=0 border=0>
+            <tr>
+              <td><br></td>
+            </tr>
+            <tr>
+              <td>
+<pre class="sourceHeading">            Line data    Source code</pre>
+<pre class="source">
+<span id="L1"><span class="lineNum">       1</span>              : /*</span>
+<span id="L2"><span class="lineNum">       2</span>              :  * in_jpeg.cpp -- read JPEG (JFIF and other) files with djpeg</span>
+<span id="L3"><span class="lineNum">       3</span>              :  * by pts@fazekas.hu at Sun Apr 14 14:50:30 CEST 2002</span>
+<span id="L4"><span class="lineNum">       4</span>              :  */</span>
+<span id="L5"><span class="lineNum">       5</span>              : </span>
+<span id="L6"><span class="lineNum">       6</span>              : #ifdef __GNUC__</span>
+<span id="L7"><span class="lineNum">       7</span>              : #ifndef __clang__</span>
+<span id="L8"><span class="lineNum">       8</span>              : #pragma implementation</span>
+<span id="L9"><span class="lineNum">       9</span>              : #endif</span>
+<span id="L10"><span class="lineNum">      10</span>              : #endif</span>
+<span id="L11"><span class="lineNum">      11</span>              : </span>
+<span id="L12"><span class="lineNum">      12</span>              : #include &quot;image.hpp&quot;</span>
+<span id="L13"><span class="lineNum">      13</span>              : </span>
+<span id="L14"><span class="lineNum">      14</span>              : #if USE_IN_JPEG</span>
+<span id="L15"><span class="lineNum">      15</span>              : </span>
+<span id="L16"><span class="lineNum">      16</span>              : #include &quot;error.hpp&quot;</span>
+<span id="L17"><span class="lineNum">      17</span>              : #include &quot;gensio.hpp&quot;</span>
+<span id="L18"><span class="lineNum">      18</span>              : #include &quot;helpere.hpp&quot;</span>
+<span id="L19"><span class="lineNum">      19</span>              : #include &lt;string.h&gt; /* memchr() */</span>
+<span id="L20"><span class="lineNum">      20</span>              : #include &lt;stdio.h&gt; /* printf() */</span>
+<span id="L21"><span class="lineNum">      21</span>              : </span>
+<span id="L22"><span class="lineNum">      22</span> <span class="tlaUNC tlaBgUNC">           0 : static Image::Sampled *in_jpeg_reader(Image::Loader::UFD *ufd, SimBuffer::Flat const&amp;) {</span></span>
+<span id="L23"><span class="lineNum">      23</span>              :   // Error::sev(Error::EERROR) &lt;&lt; &quot;Cannot load JPEG images yet.&quot; &lt;&lt; (Error*)0;</span>
+<span id="L24"><span class="lineNum">      24</span> <span class="tlaUNC">           0 :   HelperE helper(&quot;djpeg&quot;); /* Run external process `djpeg' to convert JPEG -&gt; PNM */</span></span>
+<span id="L25"><span class="lineNum">      25</span> <span class="tlaUNC">           0 :   Encoder::writeFrom(*(Filter::PipeE*)&amp;helper, *(Filter::UngetFILED*)ufd);</span></span>
+<span id="L26"><span class="lineNum">      26</span> <span class="tlaUNC">           0 :   ((Filter::PipeE*)&amp;helper)-&gt;vi_write(0,0); /* Signal EOF */</span></span>
+<span id="L27"><span class="lineNum">      27</span> <span class="tlaUNC">           0 :   return helper.getImg();</span></span>
+<span id="L28"><span class="lineNum">      28</span> <span class="tlaUNC">           0 : }</span></span>
+<span id="L29"><span class="lineNum">      29</span>              : </span>
+<span id="L30"><span class="lineNum">      30</span> <span class="tlaGNC tlaBgGNC">          11 : static Image::Loader::reader_t in_jpeg_checker(char buf[Image::Loader::MAGIC_LEN], char [Image::Loader::MAGIC_LEN], SimBuffer::Flat const&amp; loadHints, Image::Loader::UFD*) {</span></span>
+<span id="L31"><span class="lineNum">      31</span> <span class="tlaUNC tlaBgUNC">           0 :   return (0==memcmp(buf, &quot;\xff\xd8&quot;, 2)) &amp;&amp; loadHints.findFirst((char const*)&quot;,asis,&quot;,6)==loadHints.getLength()</span></span>
+<span id="L32"><span class="lineNum">      32</span> <span class="tlaGNC tlaBgGNC">          11 :          ? in_jpeg_reader : 0;</span></span>
+<span id="L33"><span class="lineNum">      33</span>              : }</span>
+<span id="L34"><span class="lineNum">      34</span>              : </span>
+<span id="L35"><span class="lineNum">      35</span>              : #else</span>
+<span id="L36"><span class="lineNum">      36</span>              : #define in_jpeg_checker (Image::Loader::checker_t)NULLP</span>
+<span id="L37"><span class="lineNum">      37</span>              : #endif /* USE_IN_XPM */</span>
+<span id="L38"><span class="lineNum">      38</span>              : </span>
+<span id="L39"><span class="lineNum">      39</span>              : Image::Loader in_jpeg_loader = { &quot;JPEG&quot;, in_jpeg_checker, 0 };</span>
+        </pre>
+              </td>
+            </tr>
+          </table>
+          <br>
+
+          <table width="100%" border=0 cellspacing=0 cellpadding=0>
+            <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+            <tr><td class="versionInfo">Generated by: <a href="https://github.com//linux-test-project/lcov" target="_parent">LCOV version 2.0-1</a></td></tr>
+          </table>
+          <br>
+
+</body>
+</html>
